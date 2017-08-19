@@ -1,0 +1,158 @@
+\chapter{\label{priloha:skripty}Skripty}
+
+\section{START.bat}
+\begin{kodblok}
+\klic{@echo} off
+\klic{cd} Complet \bs
+\klic{@echo} on
+\klic{start} server 80
+\klic{start} firefox "http://127.0.0.1/chenom"
+\end{kodblok}
+
+\section{START.sh}
+\begin{kodblok}
+\klic{#!/bin/sh}
+\klic{cd} Complet
+./server 8080&
+firefox "http://127.0.0.1:8080/chenom"
+\end{kodblok}
+
+\section{run.bat}
+\begin{kodblok}
+\koment{rem @echo off}
+\klic{set} jmeno=%1
+\klic{echo} %jmeno% >input
+\klic{set} vystup="outs{\bs}%jmeno:~1,-1%.wrl"
+
+\klic{if} EXIST %vystup% \klic{goto} cached
+
+\koment{rem ------------------}
+\koment{rem necachovat modely:}
+\koment{rem del /F /Q "outs{\bs}*.wrl"}
+\koment{rem ------------------}
+
+chenom.exe DATA{\bs}cp1250{\bs}settings.ini -e >%vystup% 2>error.log < input
+\klic{if} ERRORLEVEL 1 (
+    \klic{del} input
+
+\koment{rem ------------------------}
+\koment{rem podrobny chybovy vystup:}
+    \klic{echo} ===================================== >> error.log
+    \klic{type} %vystup% >> error.log
+\koment{rem ------------------------}
+
+    \klic{del} %vystup%
+    \koment{rem pause}
+    \klic{@echo} on
+    \klic{exit} 3
+)
+\underline{:cached}
+    \klic{del} input
+\klic{@echo} on
+\end{kodblok}
+
+\section{run.sh}
+\begin{kodblok}
+\klic{#!/bin/sh}
+vstup=input
+vystup="outs/$@.wrl"
+
+\klic{echo} $@ >$vstup
+
+\koment{# ------------------}
+\koment{# necachovat modely:}
+\klic{rm} -f outs/*.wrl
+\koment{# ------------------}
+
+\klic{if} [ ! -e $vystup ]; \klic{then}
+  \klic{if} ! ( \bs
+  ./chenom DATA/utf8/settings.ini -e <$vstup >$vystup 2>error.log \bs
+  ); \klic{then}
+    \koment{# ------------------------}
+    \koment{# podrobny chybovy vystup:}
+    \klic{echo} ======================== >> error.log
+    \klic{cat} $vystup >> error.log
+    \koment{# ------------------------}
+    \klic{rm} -f $vstup
+    \klic{rm} -f $vystup
+    \klic{exit} 3
+  \klic{fi}
+\klic{fi}
+\klic{rm} -f $vstup
+\end{kodblok}
+
+\section{run-console.bat}
+\begin{kodblok}
+\klic{@echo} off
+\klic{set} jmeno=%1
+\klic{echo} %jmeno% >input
+\klic{set} vystup="outs{\bs}%jmeno:~1,-1%.wrl"
+\klic{if} EXIST %vystup% goto cached
+
+\koment{rem ------------------}
+\koment{rem necachovat modely:}
+\koment{rem del /F /Q "outs{\bs}*.wrl"}
+\koment{rem ------------------}
+
+chenom.exe DATA{\bs}cp1250{\bs}settings.ini >%vystup% < input
+\klic{set} chyba=%ERRORLEVEL%
+\klic{if} ERRORLEVEL 1 (
+  \klic{del} input
+
+  \koment{rem ------------------------}
+  \koment{rem podrobny chybovy vystup:}
+    \klic{echo} =========================== >> error.log
+    \klic{type} %vystup% >> error.log
+  \koment{rem ------------------------}
+
+  \klic{del} %vystup%
+  \klic{pause}
+  \klic{@echo} on
+  \klic{exit} /B %chyba%
+)
+\underline{:cached}\hfill \\
+
+\klic{del} input
+\koment{rem --------------------------}
+\koment{rem zde napiste prikaz, ktery otevre model ve vasem prohlizeci}
+\koment{rem cesta k souboru je %vystup%}
+  \koment{rem explorer %vystup%}
+  %vystup%
+\koment{rem --------------------------}
+\koment{rem necachovat (druha varianta):}
+    \koment{rem del %vystup%}
+\koment{rem --------------------------}
+\klic{@echo} on
+\end{kodblok}
+
+\section{run-console.sh}
+\begin{kodblok}
+\klic{#!/bin/sh}
+\klic{echo} $@ >input
+vstup=input
+vystup="outs/$@.wrl"
+
+\koment{# ------------------}
+\koment{# necachovat modely:}
+\klic{rm} -f outs/*.wrl
+\koment{# ------------------}
+
+\klic{if} [ ! -e $vystup ]; \klic{then}
+  \klic{if} ! ( {\bs}
+    ./chenom DATA/utf8/settings.ini <$vstup >$vystup 2>error.log {\bs}
+  ); \klic{then}
+    \koment{# ------------------------}
+    \koment{# podrobny chybovy vystup:}
+    \klic{echo} ======================== >> error.log
+    \klic{cat} $vystup >> error.log
+    \koment{# ------------------------}
+    \klic{rm} -f $vstup
+    \klic{rm} -f $vystup
+    \klic{exit} 3
+  \klic{fi}
+\klic{fi}
+\klic{rm} -f $vstup
+
+\koment{# zde napiste prikaz, ktery otevre model ve vasem prohlizeci}
+\koment{# cesta k souboru je $vystup}
+\end{kodblok}

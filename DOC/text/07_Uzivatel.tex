@@ -1,0 +1,188 @@
+\chapter{Uživatelská dokumentace}
+Program \todo{CheNom} je vytvořen za účelem vizualizace organických molekul
+podle jejich jména. Zdrojové kódy byly psány tak, aby bylo možné program
+provozovat jak pod operačními systémy \todo{Windows (98+)}, tak pod těmi
+z~rodiny \todo{Linux}.
+
+Tato kapitola by měla seznámit čtenáře s~možnostmi programu a jejich využíváním
+od instalace přes běžné použití až po pokročilou konfiguraci.
+
+\section{Instalace}
+K~provozování programu je nutné mít nainstalovaný VRML prohlížeč, a to nejlépe
+integrovaný do internetového prohlížeče, který umí otevřít soubor obsahující
+v~názvu znak \%. To umožňuje použít WWW rozhraní programu. Pokud se jedná o
+standalone aplikaci, je možné program používat z~příkazové řádky.
+
+\subsection{\todo{Windows}}
+\begin{enumerate}
+	\item Nainstalujte internetový prohlížeč splňující výše uvedenou podmínku
+		  (\todo{Internet Explorer} ne) včetně pluginu pro VRML.
+	\item Zkopírujte z~přiloženého CD složku \soubor{{\bs}Windows{\bs}CheNom}
+		  na místo, kde si přejete program mít.
+	\item Pokud jste jako prohlížeč nezvolili \todo{Firefox}, pak v~textovém
+		  editoru (např. \todo{Poznámkový blok}) otevřete soubor
+		  \soubor{START.bat} a nahraďte slovo \kod{firefox} příkazem pro
+		  spuštění vašeho prohlížeče. Změny uložte.
+	\item Program se spouští obsaženým skriptem \soubor{START.bat},
+		  popř.~jeho konzolovou variantou \soubor{run-console.bat}.
+\end{enumerate}
+
+\subsection{\todo{Linux}}
+\begin{enumerate}
+	\item Nainstalujte VRML plugin pro váš internetový prohlížeč.
+	\item Zkopírujte z~přiloženého CD složku \soubor{/Linux/CheNom} na místo,
+		  kde si přejete program mít.
+	\item Spusťte v~dané složce příkaz \kod{./compile}.
+	\item Program se spouští obsaženým skriptem \soubor{START.sh},
+		  popř.~jeho konzolovou variantou \soubor{run-console.sh}.
+\end{enumerate}
+
+\section{Obsluha přes WWW rozhraní}
+Po spuštění serveru je možné přistupovat k~němu přes internetový prohlížeč.
+WWW adresa, na níž je služba dostupná je
+\uri{http://\textit{pocitac}:\textit{port}/chenom}, tedy pro počítač, na němž je
+program spuštěn na portu 80 (standardní spuštění) je to
+\stronger{\uri{http://127.0.0.1:80/chenom}}, ale protože port 80 se může vynechat
+(std. port pro HTTP protokol), stačí použít
+\stronger{\uri{http://127.0.0.1/chenom}}. Pozor, na linuxových systémech smí na
+portech nižších než 1024 spouštět služby pouze správce! Pokud jím nejste,
+obvykle se postupuje tak, že se použije port 8080.
+
+Obsluha je velmi jednoduchá. Stačí do bílé kolonky ve stránce vyplnit jméno
+sloučeniny a stisknout \klavesa{Enter}, příp.~tlačítko \kod{Zobrazit}.
+Pro vkládání speciálních znaků a formátování jsou pod touto kolonkou tlačítka.
+Modrá tlačítka slouží k~formátování (jmenováno zleva se jedná o kurzívu [\kod{i}],
+dolní index [\kod{sub}] a~horní index [\kod{sup}]) a k~vkládání mezery [\kod{\_}].
+Přesně tak, jak se tyto symboly používají v~HTML. Pro vkládání malých řeckých
+písmen slouží zelená tlačítka [\kod{$\alpha$} -- \kod{$\omega$}].
+
+Po stisknutí odeslání dotazu je tento zpracován a nastat mohou dvě alternativy.
+Buď je zadané jméno vyhodnoceno jako chybné, není vygenerován žádný model a je
+vrácena stránka obsahující seznam všech vygenerovaných chybových hlášení, nebo
+vše proběhne úspěšně, podaří se vygenerovat model zadané molekuly a vrácena je
+stránka, která jej obsahuje v~tagu \kod{$<$embed$>$}.
+
+Program se ukončuje kliknutím na červené tlačítko \kod{KONEC} v~pravém horním
+rohu. Jedná se o odkaz vedoucí na \stronger{\uri{/STOP}}.
+
+\begin{figure}[h]
+	\imgboxB{www}
+	\caption{Takto vypadá vygenerovaná stránka}
+\end{figure}
+
+\section{Obsluha z~příkazové řádky}
+K~obsluze z~příkazové řádky slouží skript \kod{run-console}. Použití je snadné,
+stačí zadat do parametru jméno požadované molekuly (může, ale nemusí být
+v~uvozovkách, pozor však na meta znaky jako ,,$<$", ,,$>$", ,,$;$", \dots).
+Program následně otevře vytvořený model (pokud nebyl název vyhodnocen jako
+chybný) v~asociované aplikaci a skript se ukončí.
+
+\section{Manipulace s~modelem}
+Kromě běžné manipulace jako je otáčení či přibližování, je možné zjišťovat chemickou
+značku atomu a seznam jemu odpovídajících lokantů kliknutím na něj. Navíc
+zde tato informace zůstane poloprůhledně zobrazena i po puštění tlačítka myši.
+Tato vlastnost může pomoci při orientaci ve složitějších modelech, navíc pomůže
+odlišit atomy, které jsou zobrazeny stejnou nebo podobnou barvou.
+
+\section{Konfigurace}
+Celý program (ve smyslu každá jeho část) je konfigurovatelný, od změny vzhledu
+generovaných modelů až po provedení rozhraní.
+
+\subsection{Databáze názvů}
+Databázi názvů molekul, které je program schopný interpretovat, lze snadno a do
+libovolné míry rozšiřovat. Nadměrným rozšiřováním se však významně prodlužuje
+doba potřebná na vytvoření derivačního stromu a s~ní i celková doba běhu
+programu. Při rozšiřování je také potřeba postupovat opatrně a dávat pozor, aby
+v~gramatice nevznikl konflikt. Pro tyto účely je dobré vytvořit si sadu názvů
+se správnými výsledky a po každé významnější změně spustit skript, který odhalí
+případnou neshodu. Další možností je použít připravený skript, který převede
+soubor gramatiky do formátu používaného programem bison. Příkaz
+\kod{bison -n -r solved gramatika.y} pak vytvoří nepotřebný soubor
+\soubor{gramatika.tab.c} a soubor \soubor{gramatika.output}, kde je mimo jiné
+popsán stavový automat přijímající danou gramatiku, ale hlavně seznam všech
+konfliktů. To usnadňuje jejich hledání a~navíc na rozdíl od testů zaručuje
+nalezení všech. Naopak vzniká opačný problém -- nalezení ,,falešných" konfliktů,
+které ve skutečnosti žádnými konflikty nejsou (bison totiž umí pracovat pouze
+s~gramatikami ze třídy LALR(1), ale gramatika \todo{chenomu} je bezkontextová
+(BKJ), což je výrazná nadmnožina [viz {\figurename}~\ref{pic:gramatiky}).
+
+\begin{figure}[h]
+	\imgbox{gramatiky}
+	\caption{\label{pic:gramatiky}Hierarchie tříd gramatik \cite{Yaghob:pp}}
+\end{figure}
+
+Vlastní rozšiřování je snadné. Je-li přidán nový terminál, je potřeba ho
+zařadit do seznamu v~souboru \soubor{terminaly.gra} a to na správnou pozici.
+Každému terminálu je přiřazeno číslo a to buď jeho zapsáním za něj odděleně
+sekvencí bílých znaků, nebo je to číslo o jedna větší než jaké bylo použito na
+předchozím řádku. Terminál musí být uveden v~apostrofech, jinak je řádek
+považován za komentář (nesmí obsahovat mezeru), ale případné uvedené číslo je
+použito.
+
+Správnou pozicí nového terminálu se myslí taková, kdy zůstanou zachovány
+příslušnosti k~jednotlivým intervalům definovaným v~souboru
+\soubor{konstanty.txt}. Ten vypadá tak, že je na každém řádku definován jeden
+interval. Definice má tvar dolní mez, libovolný znak, horní mez, sekvence bílých
+znaků (SBZ), pomlčka, SBZ, jméno intervalu, SBZ, popis bez mezer. Pokud je na
+místě pomlčky jiný znak, předpokládá se, že již následuje jen SBZ a řádek je
+ignorován.
+
+Nejobtížnějším krokem rozšiřování gramatiky je přidání nového pravidla. To se
+provádí do souboru \soubor{gramatika.gra}. Jeho syntax je uvedena
+v~Pří\-lo\-ze~\ref{priloha:databaze}.
+
+\subsection{Skripty}
+Spouštěcí skripty lze jednoduše modifikovat pro specifické potřeby uživatele
+pouhým odkomentováním/zakomentováním příslušného řádku. Bližší informace
+o~možnostech jsou obsaženy přímo v~komentářích jednotlivých skriptů
+(viz~{\appendixname}~\ref{priloha:skripty}).
+
+\subsection{WWW rozhraní}
+Celý vzhled WWW stránky použité v~tomto rozhraní lze změnit v~souboru
+\soubor{index.htm}. Je pouze nutné zachovat několik následujících pravidel:
+\begin{itemize}
+	\item Nejsou vkládány žádné soubory (obrázky, videa, skripty, styly, \dots).
+	\item Všechna místa, kde má být umístěno jméno zobrazené molekuly, jsou
+		  označena řetězcem \kod{\$NAZEV\$} (popř. řetězcem \kod{\$NAZEV*\$},
+		  pokud nemají být interpretovány HTML entity, což je vhodné k~předvyplnění
+		  aktuálního názvu do vstupního pole pro možnost jeho opravy).
+	\item Všechna místa, kde má být vložen výsledek zpracování názvu molekuly,
+		  jsou označena řetězcem \kod{\$TELO\$}.
+	\item Formulář pro odeslání dotazu \dots
+		  \begin{itemize}
+				\item je odeslán metodou GET.
+				\item má atribut action nastaven na \uri{/chenom}.
+				\item obsahuje jediný prvek (kromě tlačítka \kod{submit}) --
+					  položku jménem \kod{mol}, v~níž je vyplněn název
+					  požadované molekuly.
+		  \end{itemize}
+	\item Formátování lze provézt pomocí CSS, použity jsou dvě třídy:
+		  \begin{itemize}
+				\item \kod{error} pro chybový výstup (element \kod{div}),
+				\item \kod{vystup} pro okno molekuly (element \kod{embed}).
+		  \end{itemize}
+\end{itemize}
+
+\subsection{Vzhled modelu}
+Různé součásti vzhledu vytvořených modelů jsou definovány na různých místech.
+Pokud se má změna vzhledu projevit i v~modelech, které již byly vytvořeny (při
+zapnutém cachování [viz {\appendixname}~\ref{priloha:skripty}]), je nutné buď
+změnu provést i v~nich, nebo (což je obvykle jednodušší) smazat obsah složky
+\soubor{outs} a modely se vytvoří znovu při příštím požadavku na ně již se
+správným vzhledem.
+
+Definice vlastností jednotlivých atomů (barva a poloměr) jsou umístěny v~souboru
+\soubor{prvky.gra}. Jedná se o 5. (poloměr) a 7. (barva v~HTML formátu) sloupec.
+Sloupce jsou odděleny pomocí SBZ. Pokud řádek nezačíná dvojicí znaků ,,$>>$"
+(těsně předcházející prvnímu sloupci), je považován za komentář.
+
+Všechny ostatní vlastnosti týkající se vzhledu jsou umístěny v~souboru
+\soubor{sablona.wrl}. Jedná se o hlavičku výsledného VRML dokumentu -- modelu.
+Jsou zde definovány případné Viewpointy, základní vzhled atomů a vazeb (jména
+těchto prototypů a jejich atributy musí být zachovány).
+
+\begin{figure}[h]
+	\imgbox{sablona}
+	\caption{Hierarchie prototypů v~dokumentu modelu}
+\end{figure}
+

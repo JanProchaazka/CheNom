@@ -1,0 +1,49 @@
+\chapter{Technická realizace -- rozhraní}
+V~předchozí kapitole je popsáno jádro celého programu. To ovšem pracuje pouze na
+příkazové řádce, což sice pro vstup nevadí, ale výstup, tj. 3D model molekuly,
+je potřeba nějak interpretovat. Implementována jsou dvě řešení.
+
+\section{run-console}
+Jedná se o~velice jednoduchý skript, který očekává jako parametr jméno
+požadované molekuly. Zjistí, zda již model existuje ve složce \soubor{outs}.
+Pokud ne, je za pomoci jádra na tomto místě vytvořen. Za situace, že se toto
+podařilo, je vytvořený model otevřen definované aplikaci (schopné zobrazit
+soubory VRML). Defaultně je tímto programem internetový prohlížeč.
+
+\section{HTTP server}
+Ačkoliv se jedná spíše o koncový modul celého programu, byl pro vyšší
+variabilitu implementován jako samostatný program. Jedná se o malý a co do
+funkčnosti velice omezený HTTP server~\cite{Berners:rfc1945}.
+
+Při startu je načtena šablona stránky (tj. obsah souboru \soubor{index.htm},
+kde v~místech pro nadpis je text \kod{\$NAZEV\$}, pro nadpis s~neinterpretovanými
+HTML entitami \kod{\$NAZEV*\$} a pro tělo \kod{\$TELO\$}). Poté server začne
+poslouchat požadavky přicházející na port, jehož číslo bylo zadáno jako parametr
+(doporučeno je číslo běžně užívané pro HTTP servery -- 80). Kladně jsou vyřízeny
+pouze následující požadavky:
+\begin{itemize}
+	\item \kod{GET /chenom},
+	\item \kod{GET /chenom?mol=nazev\_molekuly} -- pokusí se vytvořit model
+		  molekuly s~daným názvem (pokud se to podaří, vrátí stránku, která model
+		  obsahuje, jinak se na stránce zobrazí seznam vygenerovaných chy\-bo\-vých
+		  hlášení),
+	\item \kod{GET /outs/nazev\_molekuly.wrl} -- vrátí model, který existuje,
+	\item \kod{GET /STOP} -- ukončí server,
+	\item \kod{GET /RESET} -- způsobí znovunačtení šablony ze souboru
+		  \soubor{index.htm}.
+\end{itemize}
+V~ostatních případech je vrácena stránka s~chybovou hláškou.
+
+V~druhé variantě dotazu je pro zajištění existence dotazovaného modelu molekuly
+použit skript \soubor{run}, který volá jádro \modul{chenom} s~volitelným
+parametrem \kod{-e}. Ten způsobí, že je na vstupu očekáván oescapovaný (pomocí
+,,htmlencode") název. Výstup je poté uložen do stejnojmenného souboru do složky
+\soubor{outs}. Chyby jsou ukládány do souboru \soubor{error.log}, jehož obsah je
+v~případě neúspěchu generování zobrazen uživateli.
+
+Server je navrhován jako localhostová aplikace a jako taková nemá velké nároky
+na provoz. Navíc zpracovávání dotazu může trvat i několik minut při 100\% zátěži
+procesoru. Z~těchto důvodů bylo při implementaci přistoupeno k~jednovláknové
+variantě.
+
+

@@ -1,0 +1,317 @@
+\chapter{Technická realizace -- jádro}
+Tato kapitola obsahuje podrobný rozbor implementace modulů, ze kterých se skládá
+jádro programu, a jejich vzájemné komunikace. Těmito moduly jsou
+\modul{Scanner}, \modul{Parser}, \modul{Semantika}, \modul{Model} a
+\modul{Grafika}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\modul{Scanner}}
+Jak již bylo řečeno, tento modul má za úkol provést lexikální analýzu
+po\-ža\-do\-va\-né\-ho názvu. To není vhodné učinit standardním způsobem, totiž po\-sta\-ve\-ním
+automatu, který je resetován po každém přijatém tokenu, protože toto
+předzpracování by bylo (vzhledem k~počtu tokenů, které budou rozpoznány) příliš
+časově náročné.
+
+Bylo tedy použito jednodušší řešení. Program postaví z~tokenů načtených ze
+souboru \soubor{terminaly.gra} lexikální strom. Při zpracovávání názvu se v~něm hledá
+vždy nejdelší cesta od kořene odpovídající dosud nepřečtenému tokenu. Při
+dosažení uzlu ve stromě, který již nemá přechod přes následující znak v~názvu či
+při dosažení konce názvu se program vrátí zpět do posledního uzlu, který je
+označen jako výstupní. Z~odpovídajícího místa v~názvu pak pokračuje nové hledání.
+Pokud se stane, že je při návratu po větvi dosažen kořen, znamená to, že se
+zbývající část názvu nepodařilo určit. Program se vrátí do posledního určeného
+tokenu a pokračuje se v~hledání (směrem ke kořenu). Pokud je dosažen kořen při
+hledání prvního tokenu, znamená to, že se programu nepodařilo název na tokeny
+rozložit a je vyvolána chybová hláška, v~níž je uveden nejkratší sufix, kterému
+se nepodařilo porozumět.
+
+Další zvláštností implementace tohoto modulu je, že nevyužívá sdru\-žo\-vá\-ní tokenů.
+Buď by totiž muselo být jejich rozlišení v~sémantické analýze implementováno
+pevně, nebo by to vyžadovalo rozšíření jazyka sémantické analýzy o jejich
+rozlišování a to kvůli ušetření jednoho (sdružovacího) neterminálu. Přesto je
+interface tohoto modulu pro sdružování připraven, protože používá soubor
+\soubor{konstanty.txt}, který přiřazuje intervalům tokenů jména.
+
+Tento soubor je navíc využit k~ošetření některých kontextových problémů. Prvním
+je vkládání a vypouštění samohlásek ve švu slova, tj. vypouštění koncového ,,a"
+nebo ,,o" v~tokenu, popřípadě vkládání ,,o" mezi tokeny. Současná implementace
+vypadá tak, že koncové ,,a" je možné vypustit kdykoliv a ,,o" je možné vložit
+do švu, pokud se jedná o jméno prvku, charakteristickou skupinu, řeckou číslovku
+nekončící samohláskou, kořen triviálního názvu nebo celý triviální název. Druhý
+kontextový problém ošetřený v~tomto modulu je existence samostatných hlásek jako
+tokenů (např. ,,a" v~,,4a,9a-but[2]enoanthracen" nebo
+v~,,dibenzo[{\textit a},{\textit j}]anthracen"). Tyto tokeny nesmějí následovat
+po písmenu, protože to by umožňovalo vracet jako tokeny pouze jednotlivé hlásky
+(například ,,methan" by bylo rozděleno jako ,,metha$|$n" místo ,,meth$|$an") a
+chyba by byla vždy vyvolána až v~syntaktické analýze, namísto v~lexikální.
+
+Práce s~tímto modulem probíhá pomocí několika funkcí. Nejprve je po\-tře\-ba načíst
+intervaly tokenů z~\soubor{konstanty.txt}, pro potřeby řešení výše popsaných
+kontextových záležitostí na úrovni lexikální analýzy. Toto načtení zajistí procedura
+\kod{inicializace\_intervalu}, která v~parametru očekává otevřený soubor.
+Následuje načtení seznamu tokenů, přičemž se z~nich postaví lexikální strom. Pro
+tyto potřeby slouží procedura \kod{inicializace}. Poté se volá procedura
+\kod{parse} se zpracovávaným názvem v~parametru. Ta ho rozdělí na tokeny,
+ale pouze v~bufferu. Tyto tokeny jsou pak vraceny postupně včetně svých flagů a
+pořadového čísla ve funkci \kod{yylex}. Obsaženy jsou ještě dvě funkce,
+\kod{hodnota} a \kod{text}, které převádí číselný kód
+terminálu na jeho jméno a naopak. To je využito hlavně v~modulu \modul{Parser}
+k~načtení gramatiky.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\modul{Parser}}
+\modul{Parser} je modul zajišťující syntaktickou analýzu názvu. Nejprve se
+provede inicializace a to tak, že se načte ze souboru \soubor{gramatika.gra} vše
+potřebné, tedy gramatická pravidla a jejich sémantický význam (sekvence příkazů).
+Při načítání se rovnou převádí hodnoty terminálů na kódy tokenů a stejně tak
+jména neterminálů. Těm je navíc potřeba ještě kódy přiřazovat, což se děje
+v~pořadí, v~jakém se vyskytují na vstupu. Sémantická pravidla se nijak
+nezpracovávají, ponechávají se ve své textové podobě. O jejich interpretaci se
+stará až v~případě potřeby modul \modul{Semantika}. Inicializace je zakončena
+testem, zda nejsou obsaženy neterminály, pro které neexistuje žádné odvozovací
+pravidlo a případně se tento nedostatek ohlásí uživateli.
+
+Práce při hlavním volání vypadá následovně. Program dokola volá
+\kod{yylex} dokud dostává tokeny a přitom z~nich tvoří graf typu cesta,
+kde tokeny tvoří orientované hrany. Následuje budování derivačního stromu nad
+tímto grafem. To probíhá tak, že se postupně prochází pravidla a u každého se
+zjišťuje, zda je možné ho aplikovat, tj. zda pravá strana pravidla odpovídá
+orientované cestě v~dosavadním grafu. Pokud ano, přidá se hrana spojující
+začátek a konec této cesty, přičemž její hodnota odpovídá kódu neterminálu na
+levé straně pravidla. Takto se hledají hrany, dokud existuje možnost, že se
+nějaká přidá a zároveň se ještě nepodařilo aplikovat pravidlo, které by
+vytvořilo hranu počátečního neterminálu přes celou původní cestu.
+
+Zároveň s~tímto grafem se buduje derivační strom a to tak, že vrcholy jsou
+tvořeny hranami původního grafu a hrany v~něm vedou z~A do B, pokud byla hrana
+odpovídající B použita při vytváření hrany odpovídající A. Zároveň se odstraní
+všechny vrcholy (a do nich, případně z~nich, vedoucí hrany), které nejsou
+součástí hlavního stromu.
+
+\begin{figure}[h]
+	\imgbox{syntax_gramatika}
+	\caption{Příklad gramatiky}
+\end{figure}
+
+\begin{figure}[h]
+	\imgbox{syntax_graf}
+	\caption{Vygenerovaný graf pro slovo ABCD}
+\end{figure}
+
+\begin{figure}[h]
+	\imgbox{syntax_strom}
+	\caption{Výsledný derivační strom}
+\end{figure}
+
+S~ostatními moduly probíhá komunikace následovně. K~inicializaci slouží
+procedura \kod{inicializace}, která načte gramatiku ze souboru, který
+očekává otevřený ve svém parametru. Pro překlad kódu symbolu (terminálu nebo
+neterminálu) na jeho textovou reprezentaci slouží funkce \kod{kod2str}.
+To je využito pouze při chybových výstupech. Komunikaci s~okolím zajišťuje ještě
+funkce \kod{yyparse}, která vrací ukazatel na typ \kod{derivacni\_strom::derivat}.
+Tato třída je velmi jednoduchá, obsahuje pouze seznam ukazatelů na potomky,
+iterátor na pravidlo gramatiky, které je daným uzlem reprezentováno a rozsah
+indexů tokenů, jež do daného podstromu spadají -- tedy veškeré informace potřebné
+k~dalšímu zpracování.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\modul{Semantika}}
+Tvorba modelu molekuly je započata vytvořením jejího grafu. To se děje v~modulu
+\modul{Semantika}. Ten nejprve zavolá funkci \kod{yyparse}, která vrátí
+de\-ri\-vač\-ní strom zpracovávaného názvu, ten vyhodnotí a strom zruší. Výsledek
+vyhodnocení je poté vrácen k~dalšímu zpracování.
+
+Vyhodnocování probíhá tak, že se volá rekurzivně na podstromy a z~na\-vrá\-ce\-ných
+dat se staví pole. V~aktuálně zpracovávaném uzlu se pak vezme sekvence příkazů
+jemu příslušící (z~gramatiky v~modulu \modul{Parser}) a ta se počne aplikovat na
+předem vytvořené pole. Jak postupují mezivýsledky stromem nahoru, nakonec se
+dostane výpočet i do kořene, který svůj výsledek vrátí jako výsledek celého
+vyhodnocování. Návratová hodnota je struktura, která mimo jiné obsahuje položku
+typu \kod{skelet}, ve které je uložena požadovaná molekula (tedy
+pouze její struktura, jména atomů, atd.).
+
+Celkově se postupuje tak, že se molekula buduje bez vodíků a až když je vše
+ostatní hotovo, připojí se na ,,volné" pozice vodíky. Pokud se stane, že
+pravidlo některého uzlu neobsahuje žádné příkazy, pak je na tuto situaci
+uživatel upozorněn. Jazyk sémantiky je velice jednoduchý, aby byla jeho
+interpretace co nejsnazší. Jeho podrobný popis je v~Příloze~\ref{priloha:jazyk}.
+
+Pro správnou interpretaci je nutné znát některé základní charakteristiky
+použitých prvků. Ty jsou načteny ze souboru \soubor{prvky.gra} při inicializaci
+(procedura \kod{inicializace}, která očekává v~parametru otevřený
+soubor). Analýza se pak spouští pomocí volání funkce \kod{yysem},
+která vrací graf molekuly typu \kod{skelet}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\modul{Model}}
+Z~grafu molekuly, který vrátí modul \modul{Semantika} je potřeba vytvořit model.
+To znamená určit polohy jednotlivých atomů v~prostoru, což zajišťuje tento
+modul. Zmíněnou úlohu je velmi obtížné přesně vyřešit a tak byl zvolen
+následující model.
+
+V~molekule dominují dvě síly. Atomy se v~důsledku elektrického náboje odpuzují,
+ale jako protiváha je drží pohromadě vzájemné vazby. Stejně tak působí
+v~použitém modelu dvě protichůdné síly. Každá dvojice atomů na sebe působí podle
+Coulombova zákona, přičemž jejich náboje jsou přímo úměrné protonovému číslu $Z$
+(což odpovídá realitě). Vazebné síly jsou pak modelovány jako guma napínaná mezi
+atomy. Využity jsou tedy následující dva vzorce. Prvním je Coulombův zákon:
+$$F_e = \frac{1}{4\pi\varepsilon}\frac{Q_1 Q_2}{r^2}, \mathrm{kde}$$
+\begin{itemize}
+	\item $\varepsilon$ je permitivita vakua (konstanta),
+	\item $Q_i$ jsou náboje jednotlivých atomů ($Q_i=e_0 Z_i$, kde $e_0$ je
+	      náboj elektronu),
+	\item $r$ je vzdálenost mezi atomy.
+\end{itemize}
+
+Druhý vzorec pak popisuje sílu mezi vázanými atomy následovně:
+$$F_p = K \Delta y, \mathrm{kde}$$
+\begin{itemize}
+	\item $K$ je lineární tuhost (materiálová konstanta),
+	\item $\Delta y$ je vzdálenost mezi atomy zmenšená o délku gumy (ta je
+	      stanovena experimentálně na hodnotu $4,0$).
+\end{itemize}
+
+Dalšího zjednodušení bylo dosaženo nahrazením spojité simulace diskrétní
+variantou. Program v~daném okamžiku vždy spočítá výslednici sil působících na
+atomy ($F$). Tuto sílu pak nechá konstantně působit po dobu $t_i$ (jedná se tedy
+o~rovnoměrně zrychlený/zpomalený pohyb). Takto je zjištěna nová poloha
+($P_{i+1}=P_i + v_i t_i + \frac{F_i t_i^2}{2m}$) a rychlost
+($v_{i+1}=v_i + \frac{F_i}{m}$) atomů a výpočet se opakuje, tentokrát se však
+síly nechají působit po dobu $t_{i+1}$. Posloupnost $t_i$ je navržena tak, aby
+výpočet nutně konvergoval (použita byla geometrická posloupnost s~kvocientem
+$0,999$ a hodnotou prvního členu $0,01$).
+
+Ačkoliv to není zřejmé, významný vliv na výsledek má i inicializace. Je potřeba,
+aby proběhla co nejrychleji, zároveň však musí umožnit rychlý přesun všech atomů
+do ,,správné" (tj. v~rámci modelu co nejkvalitnější mož\-né) konfigurace.
+Nejjednodušší varianta, jak atomy rozmístit, je umístit je do řady vedle sebe
+(například na souřadnice $\left[4i, 0, 0\right]$). To by ale mělo za následek,
+že by všechny působící síly měly směr rovnoběžný s~touto přímkou, tudíž by
+všechny atomy zůstaly na této přímce. Podobný výsledek by byl dosažen, pokud by
+všechny atomy ležely v~jedné rovině. Další zvažovanou variantou bylo rozmístění
+podle vzorce:
+$$	\left\{\left[x_i, y_i, z_i\right]\right\}_i :=
+	\left[ i, i\left(-1\right)^i, i^2\left(-1\right)^i\right],$$
+kde $\left[x_i, y_i, z_i\right]$ jsou souřadnice $i$-tého atomu. Při návrhu
+tohoto vzorce byl zohledněn fakt, že indexy atomů spojených vazbou se většinou
+liší o jedna a že je dobré inicializovat je tak, aby jim v~pohybu k~sobě nic
+nebránilo. Tato inicializace však byla dostačující pouze pro molekuly s~méně než
+40 atomy. U větších modelů byly již vzdálenosti příliš velké na to, aby se model
+během krátké doby po kterou byl simulován stihl ustálit. Hlavním důvodem je
+evidentně kvadratická závislost max. souřadnice na počtu atomů. Bylo tedy třeba
+navrhnout jinou inicializaci, která by oproti předchozí variantě zohlednila i
+potřebu umístit všechny atomy relativně blízko počátku (resp. atomů s~nimiž je
+ve vazbě).
+
+Zdá se, že nápad vytvořit počáteční pozici atomů jako rovnoměrné pokrytí sféry
+má potenciál řešit všechny výše uvedené požadavky. Přináší však ně\-ko\-lik problémů
+nových:
+\begin{itemize}
+	\item Jaký má mít sféra poloměr?
+	\item Jak umístit atomy mezi nimiž je vazba blízko sebe?
+	\item Jak rozmístit atomy rovnoměrně?
+\end{itemize}
+
+Nejproblematičnější z~těchto otázek je ta poslední -- neexistuje totiž algoritmus
+řešící tento problém. Zde jsou však přibližná řešení naprosto do\-sta\-ču\-jí\-cí a
+je-li využito to, které atomy rozmístí na sféru rovnoměrně po spirále, je navíc
+vyřešena i druhá otázka z~výše uvedeného seznamu.\cite{Saff:koule} Zbývá tak
+pouze určit vhodný poloměr použité sféry. Poloměr s~minimální energií lze
+odhadnout následovně.
+
+Předpokládejme, že atomy jsou rozmístěny rovnoměně. Tuto situaci lze odhadnout tak,
+že tvoří triangulaci, jejíž všechny stěny jsou rovnostranné trojúhelníky stejné
+velikosti. Hledáme-li stav s~minimální energií, pak musí mít každá hrana délku
+odpovídající optimální délce vazby, kterou známe. Nyní jsme již schopni dopočítat
+požadovanou plochu každé stěny, požadovaný povrch sféry a tedy i její poloměr.
+Při použití tohoto poloměru nicméně dochází k~situacím, kdy systém od začátku nemá
+dostatek energie pro dobré formování. Z~toho důvodu byla celá sféra o proti výše
+uvedenému odhadu několikanásobně zvětšena.
+
+Pro další zjednodušení modelu (resp. počítání v~něm) se neuvažují sku\-teč\-né
+hodnoty konstant (náboj, hmotnost, permitivita vakua, \dots), ale jsou nahrazeny
+hodnotami vyššími. Tím, že jsou takto upraveny všechny konstanty ve správném
+poměru, je zachováno chování modelu, ale výpočty jsou přesunuty z~řádu
+$10^{-27}$ do řádu jednotek, kde je dosahováno vyšší přesnosti. Výpočty tedy
+probíhají podle následujících vzorců:
+\begin{eqnarray*}
+	F_e&=&\frac{Z_1 Z_2}{r^2} \\
+	F_p&=&r\left(1-\frac{4,0}{r}\right)\;\left(=\Delta y\right)
+\end{eqnarray*}
+
+\begin{figure}[h]
+	\imgbox{fyz_model}
+	\caption{Vzájemná interakce mezi dvěma atomy spojenými vazbou podle modelu}
+\end{figure}
+
+Interface tohoto modulu není příliš rozsáhlý. Hlavní je metoda
+\kod{yymodel}, která vypíše pomocí následujícího modulu \modul{Grafika}
+výsledek své práce -- vytvořený model molekuly. Ten vznikne tak, že se načte
+graf molekuly z~parametru do vlastní třídy \kod{skelet} a zavolá se její
+metoda \kod{optimalize}, která pracuje výše popsaným způsobem.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\modul{Grafika}}
+Tento modul zajišťuje výstup. Slouží k~tomu jeho funkce \kod{tisk},
+jejíž parametr je model a vrácená hodnota odpovídá jeho VRML zápisu.
+
+V~hlavičce (která je v~souboru \soubor{sablona.wrl} a načítá se do paměti funkcí
+\kod{inicializace}) jsou předdefinovány pohledy (VIEWPOINT) a prototypy
+(PROTO) pro Atom (\kod{Atom}) a jednotlivé typy vazeb (\kod{Vazba1},
+\kod{Vazba2} a \kod{Vazba3}) (viz {\appendixname}~\ref{priloha:vrml}). Následují
+definice atomů skutečně použitých a to jako specifikace obecného \kod{Atom} (je
+určena barva, značka a~velikost). Poté již je vypsána konkrétní molekula. Každý
+atom je navíc instanciován s~parametrem obsahujícím seznam všech lokantů, které
+mu během stavby molekuly příslušely, s~tím, že ty, které již nejsou platné, jsou
+prefixovány vykřičníkem. Pro snazší zacházení nejsou struktury vnořeny (stejně
+by bylo obtížné určit, kterému ze dvou vázaných atomů vazba náleží).
+
+Pro určení transformace vazby do požadované polohy, bylo třeba stanovit osu a
+úhel otočení ze své počáteční (s~osou y rovnoběžné) pozice. Pro snazší
+manipulaci je vazba (válec/válce) nejprve posunuta dolní podstavou do po\-čát\-ku
+(v~generované pozici leží počátek lokálního souřadného systému uprostřed vazby).
+Nakonec je posunut do prvního z~vázaných atomů (zde se projeví výhoda prvního
+posunu).
+
+\begin{figure}[h]
+	\imgbox{transformace_vazby}
+	\caption{Výpočet parametrů pro otočení vazby do správného směru}
+\end{figure}
+
+Výpočet parametrů otočení (tedy osy a úhlu) je relativně jednoduchý a vychází
+z~následujících předpokladů:
+
+Značení: $A$ -- původní směr vazby,
+		 $B$ -- transformovaný směr vazby,
+		 $o$ -- směr osy rotace,
+		 $\phi$ -- velikost rotace,
+		 $L$ -- délka vazby $\left(=\left\|A\right\|\right)$.
+
+\zlom
+\begin{eqnarray*}
+o&=&B \times A \\
+\cos (\phi) &=& \frac{A\cdot B}{\|A\|\cdot \|B\|} \\
+A \times B &=& \left[ a_2 b_3 - a_3 b_2, a_3 b_1 - a_1 b_3, a_1 b_2 - a_2 b_1 \right] \\
+A &=& \left[ 0, L, 0\right]
+\end{eqnarray*}
+
+Po dosazení posledního vztahu do předchozích a následném vyjádření neznámých
+jsou získány kýžené parametry transformace:
+\begin{itemize}
+	\item $o=\left(-b_3, 0, b_1\right)$ (u osy je nutné zajistit pouze směr
+		  vektoru, nikoliv jeho velikost, proto je možno celý výraz zjednodušit
+		  o jistě nenulovou hodnotu $L$),
+	\item $\phi = \arccos \left(\frac{b_2}{\|B\|}\right)$.
+\end{itemize}
+
+Násobnost vazby je vyznačena počtem válců. Aby byl výsledný vzhled přirozený,
+bylo potřeba dosáhnout opticky shodné síly vazeb, zároveň však bylo potřeba
+učinit je snadno rozlišitelnými. To se snad podařilo tak, že průřezu každé vazby
+lze opsat jednotkovou kružnici a střed podstavy každého válce leží na hranici
+válců ostatních (viz {\figurename}~\ref{pic:vazba}).
+
+\begin{figure}[h]
+	\imgbox{vazba}
+	\caption{Odvození tvaru násobných vazeb v~modelu}\label{pic:vazba}
+\end{figure}
+

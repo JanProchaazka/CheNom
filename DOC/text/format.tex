@@ -1,0 +1,91 @@
+\documentclass[a4paper,12pt,notitlepage]{report}
+
+%\linespread{1.3} % radkovani jeden a pul
+
+\frenchspacing
+\usepackage[pdftitle={Chenom -- dokumentace},
+			pdfauthor={Jan Procházka},
+			pdfdisplaydoctitle=true,
+			colorlinks=false,
+			unicode=true,
+			pdfborder=0 0 0]{hyperref}
+\usepackage[utf8x]{inputenc}
+\usepackage{graphicx,color}
+\usepackage{alltt} %propracovane zdrojaky -- prostredi alltt
+\usepackage{framed}
+
+%vdovy a sirotci:
+\widowpenalty=10000
+\clubpenalty=10000
+%\newcommand{\zlom}{\hfill \colorbox [rgb]{1,0,0}{\P} \pagebreak} %LaTeX2e, graphics
+\newcommand{\zlom}{\pagebreak}
+%%%%%%%%%%%%%%%%%
+
+\title{Chenom -- dokumentace}
+\author{Jan Procházka}
+
+\renewcommand*{\chaptername}{Kapitola}
+\renewcommand*{\figurename}{Obrázek}
+\renewcommand*{\appendixname}{Příloha}
+%\renewcommand*{\refname}{Reference}
+\renewcommand*{\contentsname}{Obsah}
+\renewcommand*{\bibname}{Použitá literatura}
+
+\newcommand{\strong}{\emph}
+\newcommand{\stronger}[1]{\textbf{#1}}
+\newcommand{\itemB}[1]{\item {\bf #1}}
+
+\newcommand{\bs}{$\backslash$}
+\newcommand{\til}{$\sim$}
+
+\newcommand{\modul}{\texttt}
+\newcommand{\klavesa}[1]{\textsc{#1}}
+\newcommand{\kod}[1]{\colorbox [rgb]{0.75,0.75,0.75}{\texttt{#1}}} %LaTeX2e, graphics
+\newcommand{\klic}[1]{{\color [rgb]{0,0,1}#1}}
+\newcommand{\koment}[1]{{\color [rgb]{.5,.5,.5}{#1}}}
+\newcommand{\komentH}[1]{\colorbox [rgb]{1,1,0}{\koment{#1}}}
+\newcommand{\priklad}[1]{{\bf Př.: }\fbox{\footnotesize \tt #1}}
+\newcommand{\soubor}[1]{,,#1''}
+\newcommand{\citace}[1]{\textit{,,#1''}}
+\newcommand{\uri}[1]{\textcolor [rgb]{0,0,1}{#1}}
+
+\newenvironment{kodblok}[0]{%%%%%%%%%%
+	%\begin{minipage}{\textwidth}
+	%\pagecolor [rgb]{0,1,1}
+	%[box=\fcolorbox{blue}{hellcyan}]
+	\footnotesize
+	\begin{framed}
+	\begin{alltt}
+}{
+	\end{alltt}
+	\end{framed}
+	%\end{minipage}
+}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\newcommand{\todo}[1]{\colorbox [rgb]{1,0,0}{#1}} %LaTeX2e, graphics
+\newcommand{\todo}[1]{#1}
+
+\newcommand{\chem}[1]{$\mathrm{#1}$}
+\newcommand{\chemB}[1]{$\mathrm{\bf #1}$}
+
+\newcommand{\picref}[1]{Obrázek~\ref{#1}}
+
+\graphicspath{{grafika/all/png/}{grafika/all/pdf/}}
+\newcommand{\img}[1]{\includegraphics{#1.pdf}} % vertikalni centrovani na radku (parbox, minipage!)!!!
+\newcommand{\imgB}[1]{\includegraphics{#1.png}}
+\newcommand{\imgbox}[1]{\centering\fbox{\img{#1}}}
+\newcommand{\imgboxB}[1]{\centering\fbox{\imgB{#1}}}
+\newcommand{\imgrot}[1]{\rotatebox{90}{\img{#1}}} %otoceni obrazku o 90°
+
+
+%\includeonly{ 00_Front, 01_Uvod, 09_Reference, 10_A_Jazyk, 10_B_index, 10_D_databaze}
+%\includeonly{02_Organika}
+
+%\hyphenation{pře-hled-nost} %neumí háčky/čárky :(
+\hyphenation{mo-le-ku-la mo-le-ku-ly mo-le-ku-le mo-le-ku-lu mo-le-ku-lo mo-le-ku-lou mo-le-kul mole-ku-la-mi} %mo-le-ku-lám mo-le-ku-lách 
+\hyphenation{pa-ra-me-tr pa-ra-me-tru pa-ra-met-rem}
+\hyphenation{pra-vi-del}
+\hyphenation{od-stra-nit}
+\hyphenation{jed-no-du-chou}
+\hyphenation{je-ho}
+\hyphenation{a-tom}

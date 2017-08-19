@@ -1,0 +1,58 @@
+\chapter{Závěr}
+Cílem této práce bylo vytvořit program, který by pomohl především studentům
+středních škol při studiu názvosloví organické chemie. Tento vytyčený cíl byl
+snad programem CheNom naplněn. Přesto je možné mnohé věci vy\-lep\-šit.
+
+\section{Možnosti rozšiřování}
+Určitá zlepšení je možné provést zpřesněním modelování, rozšířením o~interpretaci
+názvů některých druhů sloučenin a stereochemických názvů nebo zjednodušením
+instalace.
+
+Nepřesnosti v~modelování spočívají v~přílišném zjednodušení použitého modelu.
+Bylo by ji vhodné nahrait za některou~chemiky používanou metodu, jako například
+hybridizace nebo VSEPR\cite{Micka:anorgana}. Systematické názvosloví heterocyklů
+a kondenzovaných polycyklů nebylo implementováno, protože má zcela odlišná
+pravidla tvoření názvů a často jsou tyto názvy chápány spíše jako triviální.
+Implementovat stereochemická pravidla nemá smysl, dokud je použit pro modelování
+současný model, který není schopen zaručit jejich dodržení.
+
+Dalšího zpřesnění modelu by bylo dosaženo, kdyby byl program schopen při dalším
+dotazu na stejnou molekulu ji dále aproximovat (např. vždy po dobu dalších 10\,s).
+
+Pro větší pohodlí uživatele by bylo možné vytvořit instalátor / instalační
+skript, který by umožňoval nakonfigurovat program automaticky. Jednalo by se o
+umístění zástupce programu na plochu či do nabídky start, určení používaného
+interface, rozsahu cachování, atd.
+
+\section{Alternativní implementace}
+V~průběhu tvorby programu byly zvažovány různé způsoby implementace jednotlivých
+modulů.
+
+V~modulu \modul{Parser} přicházela v~úvahu alternativa urychlující proces stavby
+derivačního stromu. Program by neprocházel stále dokola všechna pravidla
+gramatiky, ale místo toho použil zásobník (nebo frontu) na uložení těch
+pravidel, která by bylo možné použít. Seznam pravidel v~zásobníku (frontě)
+nejprve tvoří všechna pravidla gramatiky. Při snaze o vytvoření derivačního
+stromu jsou nepoužitá pravidla odstraňována a naopak jsou přidávána pravidla
+po\-u\-ži\-tá pravidla obsahující. Gramatika programu CheNom ovšem není natolik
+rozsáhlá, aby takto pracná implementace měla význam (doba výpočtu v~modulu
+\modul{Model} je totiž výrazně delší).
+
+V~modulu \modul{Server} byla zvažována možnost vkládání různých souborů
+(obrázky, skripty, kaskádové styly, atd.) do WWW stránky rozhraní. Tato možnost
+byla z~bezpečnostních důvodů zavrhnuta. Bylo by nutné ošetřit, aby uživatel
+nemohl program zneužít pro obejití nepovoleného přístupu k~souborům.
+
+\section{Porovnání s~existujícím SW}
+V~současnosti je na trhu nepřeberné množství programů zaměřených na problematiku
+různých oblastí chemie. Co se týče interpretace českého názvu organických
+sloučenin, žádný takový software neexistuje.
+
+Příkladem programu, který se také zabývá vizualizací molekul, je program
+ACD/Labs~8.0. Jeho předností je přesný model molekuly, ve kterém je možné také
+měřit vzdálenosti mezi atomy a vazebné úhly. Navíc umožňuje snadno přecházet
+mezi různými typy zobrazení (např. barvy a velikosti atomů). Naopak nevýhodami
+jsou možnost práce s~názvem pouze ve směru od struktury, neschopnost programu
+v~modelu graficky rozlišit násobnosti vazeb a jeho nedostupnost v~češtině (a
+tedy ani programem generované názvy nejsou česky).
+

@@ -1,0 +1,59 @@
+\contentsline {chapter}{\numberline {1}\IeC {\'U}vod}{4}{chapter.1}
+\contentsline {chapter}{\numberline {2}Problematika organick\IeC {\'e} chemie}{6}{chapter.2}
+\contentsline {section}{\numberline {2.1}N\IeC {\'a}zvoslov\IeC {\'\i }}{6}{section.2.1}
+\contentsline {section}{\numberline {2.2}Grafick\IeC {\'a} reprezentace molekul\cite {Mysicka:vzorce}}{7}{section.2.2}
+\contentsline {chapter}{\numberline {3}Dekompozice}{12}{chapter.3}
+\contentsline {chapter}{\numberline {4}Technick\IeC {\'a} realizace -- j\IeC {\'a}dro}{14}{chapter.4}
+\contentsline {section}{\numberline {4.1}\texttt {Scanner}}{14}{section.4.1}
+\contentsline {section}{\numberline {4.2}\texttt {Parser}}{15}{section.4.2}
+\contentsline {section}{\numberline {4.3}\texttt {Semantika}}{17}{section.4.3}
+\contentsline {section}{\numberline {4.4}\texttt {Model}}{18}{section.4.4}
+\contentsline {section}{\numberline {4.5}\texttt {Grafika}}{20}{section.4.5}
+\contentsline {chapter}{\numberline {5}Technick\IeC {\'a} realizace -- rozhran\IeC {\'\i }}{23}{chapter.5}
+\contentsline {section}{\numberline {5.1}run-console}{23}{section.5.1}
+\contentsline {section}{\numberline {5.2}HTTP server}{23}{section.5.2}
+\contentsline {chapter}{\numberline {6}Probl\IeC {\'e}my implementace}{25}{chapter.6}
+\contentsline {section}{\numberline {6.1}P\IeC {\v r}id\IeC {\'a}v\IeC {\'a}n\IeC {\'\i } trivi\IeC {\'a}ln\IeC {\'\i }ch n\IeC {\'a}zv\IeC {\r u}}{25}{section.6.1}
+\contentsline {section}{\numberline {6.2}T\IeC {\v r}\IeC {\'\i }da jazyka organick\IeC {\'e} chemie}{25}{section.6.2}
+\contentsline {section}{\numberline {6.3}N\IeC {\'a}zvy \IeC {\v c}in\IeC {\'\i }c\IeC {\'\i } komplikace}{26}{section.6.3}
+\contentsline {section}{\numberline {6.4}Konstituce, konfigurace, konformace}{27}{section.6.4}
+\contentsline {chapter}{\numberline {7}U\IeC {\v z}ivatelsk\IeC {\'a} dokumentace}{28}{chapter.7}
+\contentsline {section}{\numberline {7.1}Instalace}{28}{section.7.1}
+\contentsline {subsection}{\numberline {7.1.1}Windows}{28}{subsection.7.1.1}
+\contentsline {subsection}{\numberline {7.1.2}Linux}{29}{subsection.7.1.2}
+\contentsline {section}{\numberline {7.2}Obsluha p\IeC {\v r}es WWW rozhran\IeC {\'\i }}{29}{section.7.2}
+\contentsline {section}{\numberline {7.3}Obsluha z\nobreakspace {}p\IeC {\v r}\IeC {\'\i }kazov\IeC {\'e} \IeC {\v r}\IeC {\'a}dky}{29}{section.7.3}
+\contentsline {section}{\numberline {7.4}Manipulace s\nobreakspace {}modelem}{30}{section.7.4}
+\contentsline {section}{\numberline {7.5}Konfigurace}{30}{section.7.5}
+\contentsline {subsection}{\numberline {7.5.1}Datab\IeC {\'a}ze n\IeC {\'a}zv\IeC {\r u}}{30}{subsection.7.5.1}
+\contentsline {subsection}{\numberline {7.5.2}Skripty}{31}{subsection.7.5.2}
+\contentsline {subsection}{\numberline {7.5.3}WWW rozhran\IeC {\'\i }}{31}{subsection.7.5.3}
+\contentsline {subsection}{\numberline {7.5.4}Vzhled modelu}{32}{subsection.7.5.4}
+\contentsline {chapter}{\numberline {8}Z\IeC {\'a}v\IeC {\v e}r}{35}{chapter.8}
+\contentsline {section}{\numberline {8.1}Mo\IeC {\v z}nosti roz\IeC {\v s}i\IeC {\v r}ov\IeC {\'a}n\IeC {\'\i }}{35}{section.8.1}
+\contentsline {section}{\numberline {8.2}Alternativn\IeC {\'\i } implementace}{36}{section.8.2}
+\contentsline {section}{\numberline {8.3}Porovn\IeC {\'a}n\IeC {\'\i } s\nobreakspace {}existuj\IeC {\'\i }c\IeC {\'\i }m SW}{36}{section.8.3}
+\contentsline {chapter}{Pou\IeC {\v z}it\IeC {\'a} literatura}{37}{chapter*.2}
+\contentsline {chapter}{\numberline {A}S\IeC {\'e}mantika - jazyk}{38}{appendix.A}
+\contentsline {section}{\numberline {A.1}Konstanty}{38}{section.A.1}
+\contentsline {section}{\numberline {A.2}Parametry -- reference}{38}{section.A.2}
+\contentsline {section}{\numberline {A.3}Instrukce}{39}{section.A.3}
+\contentsline {subsection}{\numberline {A.3.1}Konvence:}{39}{subsection.A.3.1}
+\contentsline {subsection}{\numberline {A.3.2}INT -- \IeC {\v c}\IeC {\'\i }slo}{40}{subsection.A.3.2}
+\contentsline {subsection}{\numberline {A.3.3}STR -- \IeC {\v r}et\IeC {\v e}zec}{40}{subsection.A.3.3}
+\contentsline {subsection}{\numberline {A.3.4}MOL -- skelet}{41}{subsection.A.3.4}
+\contentsline {chapter}{\numberline {B}index.htm}{44}{appendix.B}
+\contentsline {chapter}{\numberline {C}Skripty}{45}{appendix.C}
+\contentsline {section}{\numberline {C.1}START.bat}{45}{section.C.1}
+\contentsline {section}{\numberline {C.2}START.sh}{45}{section.C.2}
+\contentsline {section}{\numberline {C.3}run.bat}{45}{section.C.3}
+\contentsline {section}{\numberline {C.4}run.sh}{46}{section.C.4}
+\contentsline {section}{\numberline {C.5}run-console.bat}{47}{section.C.5}
+\contentsline {section}{\numberline {C.6}run-console.sh}{48}{section.C.6}
+\contentsline {chapter}{\numberline {D}Datab\IeC {\'a}zov\IeC {\'e} soubory}{49}{appendix.D}
+\contentsline {section}{\numberline {D.1}settings.ini}{49}{section.D.1}
+\contentsline {section}{\numberline {D.2}konstanty.txt}{49}{section.D.2}
+\contentsline {section}{\numberline {D.3}terminaly.gra}{50}{section.D.3}
+\contentsline {section}{\numberline {D.4}gramatika.gra}{52}{section.D.4}
+\contentsline {section}{\numberline {D.5}prvky.gra}{53}{section.D.5}
+\contentsline {section}{\numberline {D.6}sablona.wrl}{53}{section.D.6}

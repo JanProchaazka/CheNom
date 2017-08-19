@@ -1,0 +1,323 @@
+\chapter{\label{priloha:databaze}Databázové soubory}
+\section{settings.ini}
+\begin{kodblok}
+[Soubory]
+Konstanty = konstanty.txt
+Terminaly = terminaly.gra
+Gramatika = gramatika.gra
+Prvky = prvky.gra
+Vystup = sablona.wrl
+\end{kodblok}
+
+Jméno souboru nesmí obsahovat mezeru, pokud je použita relativní cesta, nesmí
+být z~bezpečnostních důvodů použit odkaz do nadřazené složky. Cesta je vztažena
+ke~složce, v~níž se nachází tento soubor. Tedy pokud je absolutní cesta k~tomuto
+souboru \soubor{C:{\bs}chenom{\bs}DATA{\bs}settings.ini}, ukazuje cesta
+\soubor{v2{\bs}prvky} na soubor \soubor{C:{\bs}chenom{\bs}DATA{\bs}v2{\bs}prvky}.
+
+\section{konstanty.txt}
+\begin{kodblok}
+0000-0006 - Separator \koment{(.,,,:,;,-,->)}
+0007-0007 - Carka \koment{(')}
+0008-0019 <
+0020-0029 - Zavorka \koment{((,),[,],\{,\})}
+0030-0039 - Operace \koment{(de,nor,anhydro,cyklo,seko,abeo,retro)}
+0040-0049 <
+0050-0059 - Formatovani \koment{(<i>,<sub>,...)}
+0060-0099 <
+0100-0199 - CharakteristickaSkupina \koment{(yl,an,en,yn,...)}
+0200-0299 - Stereodeskriptory \koment{(cis,trans,meso,...)}
+0300-0499 <
+0500-0529 - AnorgPripona \koment{(ný,natý,...)}
+0530-0999 <
+1000-1009 - Cislice \koment{(0123456789)}
+1010-1099 <
+1100-1199 - Alfabeta \koment{(\(\mathrm{\alpha\beta}\)...)}
+1200-1229 - Latinka \koment{(abcd...)}
+1230-1249 - Samohlaska \koment{(aáeéěiíoóuúůyý)}
+1250-1399 <
+1400-1433 - ReckePocty \koment{(#lokantů--přidat_násobnost_lokantů,...)}
+1434-1499 - LatinskePocty \koment{(počty_opakování_struktur,...)}
+1500-1999 <
+2000-2199 - ZnackaPrvku \koment{(H,He,...)}
+2200-2999 - JmenoPrvku \koment{(oxa,sila,...)}
+3000-3999 - TypSlouceniny \koment{(aren,oxokyselina,keton,...)}
+4000-4999 - TrivKoren \koment{(bora,oxida,joda,metha,...)}
+5000-9999 - TrivNazvy \koment{(acetylen,ethan,...)}
+\end{kodblok}
+
+\section{terminaly.gra}
+\begin{kodblok}
+========= 0000
+'-'
+';'
+':'
+','
+'.'
+'->'
+'''
+--------- 0020
+'('
+')'
+'['
+']'
+'{'
+'}'
+--------- 0030
+'de'
+'nor'
+'anhydro'
+'cyklo'
+'seko'
+'abeo'
+'retro'
+'per'
+--------- 0050
+'&nbsp;'
+'<sup>'
+'</sup>'
+'<sub>'
+'</sub>'
+'<i>'
+'</i>'
+========= 0100
+'yl'
+'yliden'
+'ylidyn'
+'ium'
+'ylium'
+'id'
+'it'
+'át'
+'an'
+'en'
+'yn'
+'al'
+'ol'
+'on'
+'lat'
+'at'
+'oyl'
+'imin'
+'amoyl'
+'oát'
+'os'
+  .
+  .
+  .
+\end{kodblok}
+
+\section{gramatika.gra}
+\imgrot{gramatika_gramatiky}
+
+\section{prvky.gra}
+\begin{kodblok}
+--Zn    Z  arita  hybridizace    poloměr  hmotnost  barva
+----------------------------------------------------------
+>>H     1    1          s1          1       1.E-3  #0000ff
+--He    2   -1          -           1       1.E-3  #ffffff
+--Li    3   -1          -           1       1.E-3  #ffffff
+--Be    4   -1          -           1       1.E-3  #ffffff
+--B     5    3          -           1       1.E-3  #ffffff
+>>C     6    4          s1p3        1       1.E-2  #ff0000
+>>N     7    3          s1p2        1       1.E-3  #00ff00
+>>N     7    5          s1p3d1      1       1.E-3  #00ff00
+>>O     8    2          s1p1        1       1.E-3  #ffffff
+>>F     9    1          s1          1       1.E-3  #00ffff
+--Ne   10   -1          -           1       1.E-3  #ffffff
+  .     .    .          .           .         .       .
+  .     .    .          .           .         .       .
+  .     .    .          .           .         .       .
+\end{kodblok}
+
+\section{\label{priloha:vrml}sablona.wrl}
+\begin{kodblok}
+\klic{#VRML V2.0 utf8}
+\klic{NavigationInfo} \{ type "EXAMINE" \}
+\koment{############################## pohledy ##############################}
+\klic{Viewpoint} \{
+  position 0 0 50
+  description "above"
+\}
+\komentH{# \dots}
+
+\koment{############################ atom - vzor ############################}
+\klic{PROTO} Atom[
+    field SFColor   dCol 1.0 1.0 1.0  \koment{# barva atomu}
+    field SFFloat   fRad 1.           \koment{# polomer atomu}
+    field MFString  sSig []           \koment{# znacka prvku}
+    field MFString  sLoc []           \koment{# seznam lokantu atomu}
+    ]\{
+  Transform\{
+    children[
+      \klic{DEF} java Script\{
+        eventIn   SFBool   popisky
+        eventOut  SFFloat  outputVis
+        eventOut  SFVec3f  outputPos
+        url "javascript:
+          function popisky(value)\{
+            if (value)\{
+              outputVis = 0.0;
+              outputPos[0] = 0.0;
+              outputPos[1] = 0.0;
+              outputPos[2] = 8.0;
+            \}else\{
+              outputVis = 0.5;
+              outputPos[0] = 0.0;
+              outputPos[1] = 0.0;
+              outputPos[2] = 1.0;
+            \}
+          \}
+        "
+      \}
+      Billboard\{
+        axisOfRotation 0. 0. 0.
+        children[
+          \klic{DEF} pozice Transform\{
+            translation .0 .0 1. \koment{# -fRad/2 -fRad/2 fRad}
+            children[
+              Shape\{      \koment{#znacka prvku}
+                geometry Text \{
+                  string \klic{IS} sSig
+                  fontStyle FontStyle\{
+                    justify ["MIDDLE","MIDDLE"]
+                  \}
+                \}
+                appearance
+                  Appearance\{
+                    material \klic{DEF} vzhled Material \{
+                      diffuseColor 1. .0 .0  \koment{#barva popisku}
+                      transparency 1.
+                    \}
+                  \}
+              \}
+              Transform\{  \koment{#seznam lokantu}
+                translation .0 -1. .0
+                children[
+                  Shape\{
+                    geometry Text \{
+                      string \klic{IS} sLoc
+                      fontStyle FontStyle\{
+                        justify ["BEGIN","TOP"]
+                        family ["Palatino Linotype" ]
+                      \}
+                    \}
+                    appearance
+                      Appearance\{
+                        material \klic{DEF} vzhledLoc Material \{
+                          diffuseColor 1. 1. .0  \koment{#barva popisku}
+                          transparency 1.
+                        \}
+                      \}
+                  \}
+                ]
+              \}
+            ]
+          \}
+          Shape\{
+            geometry Sphere \{
+              radius .5              \koment{#polomer vnitrni casti}
+            \}
+            appearance
+              Appearance\{
+                material Material \{
+                  diffuseColor \klic{IS} dCol
+                  transparency 0.    \koment{#vnitrni cast - viditelnost}
+                \}
+              \}
+          \}
+          Shape\{
+            geometry Sphere \{
+              radius \klic{IS} fRad
+            \}
+            appearance
+              Appearance\{
+                material Material \{
+                  diffuseColor \klic{IS} dCol
+                  transparency .5    \koment{#vnejsi cast - viditelnost}
+                \}
+              \}
+          \}
+          \klic{DEF} tl TouchSensor\{  \koment{#atom bude reagovat na stisk tl.}
+          \}
+        ]
+      \}
+    ]
+  \}
+  \klic{ROUTE} tl.isActive \klic{TO} java.popisky
+  \klic{ROUTE} java.outputVis \klic{TO} vzhled.transparency
+  \klic{ROUTE} java.outputVis \klic{TO} vzhledLoc.transparency
+  \klic{ROUTE} java.outputPos \klic{TO} pozice.translation
+\}
+
+\koment{########################### vazby - vzory ###########################}
+\klic{PROTO} Spoj[
+    field SFColor dCol 1.0 1.0 1.0
+    field SFFloat fLen 2.
+    field SFVec3f fPos 0 1 0.  #0 fLen/2 0
+    field SFFloat fRad .5
+]\{
+  Transform\{
+    translation \klic{IS} fPos
+    children[
+      Shape\{
+        geometry Cylinder \{
+          height \klic{IS} fLen
+          radius \klic{IS} fRad
+        \}
+        appearance
+        Appearance\{
+          material Material \{
+            diffuseColor \klic{IS} dCol
+            transparency 0
+          \}
+        \}
+      \}
+    ]
+  \}
+\}
+
+\klic{PROTO} Vazba1 [
+    field SFFloat fDist 2.
+    field SFVec3f fPoz  0 1 0.
+]\{
+  Spoj \{
+    dCol 1.0 1.0 1.0
+    fLen \klic{IS} fDist
+    fPos \klic{IS} fPoz
+  \}
+\}
+
+\klic{PROTO} Vazba2 [
+    field SFFloat fDist 2.
+    field SFVec3f fPoz  0 1 0.
+]\{
+  Transform\{
+    children[
+      Transform\{
+        translation .16666666 0 0
+        children Spoj \{
+          dCol 0 1 1
+          fRad .33333333
+          fLen \klic{IS} fDist
+          fPos \klic{IS} fPoz
+        \}
+      \}
+      Transform\{
+        translation -.16666666 0 0
+        children Spoj \{
+          dCol 0 1 1
+          fRad .33333333
+          fLen \klic{IS} fDist
+          fPos \klic{IS} fPoz
+        \}
+      \}
+    ]
+  \}
+\}
+
+\komentH{# PROTO Vazba3 - obdobne}
+
+\koment{#####################################################################}
+\end{kodblok}
+

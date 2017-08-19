@@ -1,0 +1,261 @@
+\chapter{\label{priloha:jazyk}Sémantika - jazyk}
+
+\newcommand{\prikaz}[1]{{\bf \item {\tt #1}}}
+
+
+\section{Konstanty}
+\begin{itemize}
+	\itemB{číslo:} {$\#10$} (nezáporné celé číslo)
+	\itemB{náboj:} {\tt $\#2$}, {\tt $\#-2$} (celé číslo)
+	\itemB{řetězec:} {\tt {\til}text{\til}}
+	\itemB{vazba:}	{\tt $-$} (jednoduchá),
+					{\tt $=$} (dvojná),
+					{\tt $\%$} (trojná)
+\end{itemize}
+
+\section{Parametry -- reference}
+Syntaktický strom se prochází postfixově a v~každém uzlu se vyhodnocuje
+sémantika na základě (již vyhodnocených) potomků. V~právě vyhodnocovaném uzlu je
+vytvořeno pole obsahující výsledné hodnoty všech potomků a na nultou pozici se
+zapisuje vlastní výsledek. Tyto položky jsou dostupné pod svým indexem (tedy
+první syn odpovídá {\tt \$1}). Každý takový uzel je \kod{struct}, na jehož
+položky se přistupuje standardní tečkovou notací. V~každé instrukci má každý
+parametr nějakou defaultní položku, kterou není nutné (ale je možné) uvádět.
+
+Položky jsou následující:
+\begin{itemize}
+	\itemB{{\tt .int}} -- číslo,
+	\itemB{{\tt .str}} -- řetězec,
+	\itemB{{\tt .zdo}} -- seznam dvojic lokantů (pokud to není odkud-kam, ale
+				 pouze kde, tj. není to dvojice, pak se v~definici neuvádí druhá
+				 položka a její hodnota je nastavena na prázdný řetězec)
+				 \begin{itemize}
+					\itemB{{\tt .z}} -- podpoložka odkud/kde (ze seznamu vrátí
+									  poslední hodnotu -- Pouze pro čtení!),
+					\itemB{{\tt .k}} -- podpoložka kam (ze seznamu vrátí
+									  poslední hodnotu -- Pouze pro čtení!),
+				 \end{itemize}
+	\itemB{{\tt .mol}} -- skelet -- atomy a vazby mezi nimi, pokud je potřeba
+				 definovat jen některé jeho vlastnosti, vkládá se atom
+				 označený jako {\tt {\til}.{\til}}; jemu je pak možné nastavovat
+				 vlastnosti jako vaznost, náboj, \dots; pokud je potřeba
+				 definovat pouze vazbu, pak volná vede z~1 do 0 a každá jiná
+				 z~1 do 1.
+\end{itemize}
+
+\section{Instrukce}
+Jazyk obsahuje několik tříd instrukcí, přístup se provádí přes standardní
+čtyřtečkovou (\kod{class::method}) konstrukci. Za každou instrukcí následuje
+středník.
+
+\subsection{Konvence:}
+\begin{itemize}
+	\item Nepovinné parametry jsou v~hranaté závorce (tedy
+		  {\tt XXX(\textit{a}[,\textit{b}]}) znamená buď
+		  {\tt XXX(\textit{a},\textit{b})}, nebo {\tt XXX(\textit{a})}).
+	\item Jména parametrů jsou volena podle přípustného obsahu a to podle
+		  následujícího seznamu:
+		  \begin{itemize}
+				\item $n$ -- nezáporné celé číslo
+				\item $rn$ -- reference na $n$ (defaultní položka je {\tt .int})
+				\item $N$ -- $n$ nebo $rn$
+				\item $z$ -- celé číslo
+				\item $rz$ -- reference na $z$ (defaultní položka je {\tt .int})
+				\item $Z$ -- $z$ nebo $rz$
+				\item $s$ -- řetězec
+				\item $rs$ -- reference na $s$ (defaultní a jediná položka je
+						  {\tt .str})
+				\item $S$ -- $s$ nebo $rs$
+				\item $l$ -- seznam (dvojic) lokantů
+				\item $rl$ -- reference na $l$ (defaultní položka je {\tt .zdo})
+				\item $L$ -- $l$ nebo $rl$
+				\item $m$ -- skelet -- zapisuje se následujícím způsobem:
+					\begin{itemize}
+						\item definice se skládá ze dvou částí oddělených
+							  dvojtečkou
+						\item první část obsahuje definice atomů, tj. seznam
+							  definic atomů oddělených pomlčkou uzavřený do
+							  hranatých závorek
+						\item definice atomu vypadá takto: \\
+							  {\tt ({\til}\textit{znacka}{\til},\#\textit{nasobnost},\textit{seznam\_jmen})}
+						\item v~seznam\_jmen se alternativní názvy oddělují
+							  čárkou a celý je uzavřen do složených závorek
+						\item druhá část obsahuje definice vazeb, tj. seznam
+							  definic vazeb oddělených čárkou uzavřený do
+							  hranatých závorek
+						\item definice vazby vypadá následovně: {\tt zVk}, kde
+							  {\tt z} a {\tt k} jsou po\-řa\-do\-vá čísla vázaných
+							  atomů z~první části definice (0 znamená volný
+							  konec) a {\tt V} je typ vazby (tj. jeden ze
+							  symbolů {\tt -}, {\tt =}, {\tt \%})
+						\item \priklad{[(\til{}P\til{},\#3,\{\til{}1\til{}\})-(\til{}N\til{},\#5,\{\til{}2\til{},\til{}a\til{}\})]:[1\%2,2=0]}
+					\end{itemize}
+				\item $rm$ -- reference na $m$ (defaultní položka je {\tt .mol})
+				\item $M$ -- $m$ nebo $rm$
+		  \end{itemize}
+\end{itemize}
+
+\subsection{INT -- číslo}
+\begin{itemize}
+	\prikaz{NEW($N$)} -- dosadí do {\tt \$0.int} hodnotu $N$
+
+		\priklad{INT::NEW(\#3);INT::NEW(\$1.int);INT::NEW(\$1);}
+
+	\prikaz{ADD($rn$,$N$)} -- položku $rn$ zvětší o~hodnotu $N$
+
+		\priklad{INT::ADD(\$0.int,\#3);INT::ADD(\$0,\$2.int);}
+
+	\prikaz{MUL($rn$,$N$)} -- položku $rn$ zvětší $N$-krát
+
+		\priklad{INT::MUL(\$0.int,\#10);INT::MUL(\$0,\$2.int);}
+\end{itemize}
+
+\subsection{STR -- řetězec}
+\begin{itemize}
+	\prikaz{NEW($S$)} -- dosadí do {\tt \$0.str} hodnotu $S$
+
+		\priklad{INT::NEW({\til}abc{\til}); INT::NEW(\$1.str); INT::NEW(\$1);}
+
+	\prikaz{APP($rs$,$S$)} -- za $rs$ připojí řetězec $S$
+
+		\priklad{INT::ADD(\$0.str,{\til}abc{\til});INT::ADD(\$0,\$2.str);}
+\end{itemize}
+
+\subsection{MOL -- skelet}
+\begin{itemize}
+	\prikaz{ZDO($rl$,$S_1$[,$S_2$])} -- na konec $rl$ připojí nově vytvořený
+				lokant buď z~$S_1$(kde), nebo z~$S_1$(odkud) do $S_2$(kam)
+
+		\priklad{MOL::ZDO(\$0.zdo,\$1.str,\til{}1\til{});MOL::ZDO(\$0,\$1);}
+
+	\prikaz{LAP($rl$,$L$)} -- za seznam lokantů $rl$ připojí seznam lokantů $L$
+
+		\priklad{MOL::LAP(\$0.zdo,\$1.zdo);MOL::LAP(\$1,\$2);}
+
+	\prikaz{NEW($m$)} -- dosadí do {\tt \$0.mol} hodnotu $m$
+
+		\priklad{MOL::NEW([(\til{}N\til{},\#3,\{\til{}1\til{}\})-(\til{}N\til{},\#5,\{\til{}2\til{},\til{}a\til{}\})]:[1\%2,2=0]);}
+
+	\prikaz{CPY($rm$)} -- dosadí do {\tt \$0.mol} hodnotu $rm$
+
+		\priklad{MOL::CPY(\$1.mol);}
+
+	\prikaz{NWA($S$)} -- dosadí do {\tt \$0.mol} atom (se standardní vazností),
+				jehož značka je $S$ a přiřadí mu lokant {\til{}$1$\til{}}
+
+		\priklad{MOL::NWA(\til{}Na\til{});MOL::NWA(\$1.str);MOL::NWA(\$1);}
+
+	\prikaz{SUB($rm_1$,$rm_2$,$N$[,$L$])} -- v~$rm_1$ nahradí atomy na pozicích
+				$L$ atomem $rm_2$ (skelet obsahující právě jeden atom), zároveň
+				otestuje, zda jich je $N$; pokud $L$ chybí, nahradí se všechny
+				atomy v~$rm_1$, kterých je v~tom případě očekáváno $N$
+
+		\priklad{MOL::SUB(\$5.mol,\$4.mol,\$3.int,\$1.zdo);}
+
+	\prikaz{DLA($rm$,$N$,$L$)} -- v~$rm$ odstraní atomy na pozicích $L$ (pokud
+				je atom připojen jednou vazbou --- kromě vodíků ---, tak je tato
+				pouze zrušena, pokud dvěma stejné násobnosti, tak jsou tito
+				,,sousedé" propojeni), zároveň otestuje, zda jich je $N$
+
+		\priklad{MOL::DLA(\$4.mol,\$3.int,\$1.zdo);}
+
+	\prikaz{DLX($rm$,$S$)} -- v~$rm$ odstraní atom na pozici $S$ (všechny vazby
+				jsou ponechány jako volné)
+
+		\priklad{MOL::DLX(\$4.mol,{\til}1{\til});}
+
+	\prikaz{DLV($rm$,$N$,$L$)} -- v~$rm$ odstraní všechny vazby dle $L$({\tt .z}
+				-- {\tt .k}), zároveň otestuje, zda jich je $N$
+
+		\priklad{MOL::DLV(\$3.mol,\$2.int,\$1.zdo);MOL::DLV(\$3,\$2,\$1);}
+
+	\prikaz{DEC($rm$,$N$,$L$)} -- v~$rm$ sníží násobnosti vazeb o~1 (případně je
+				zruší) dle $L$, zároveň otestuje, zda jich je $N$ (pokud je
+				v~$L$ u~všech položek {\tt .zdo.k} prázdný řetězec, pak se
+				požaduje dvojnásobná velikost $L$ oproti $N$ a položky se berou
+				po dvou)
+
+		\priklad{MOL::DEC(\$3.mol,\$2.int,\$1.zdo);MOL::DEC(\$3,\$2,\$1);}
+
+	\prikaz{INC($rm$,$N$[,$L$])} -- opak {\tt DEC}, tedy v~$rm$ zvýší násobnosti
+				vazeb o~1 (případně je vytvoří) dle $L$, zároveň otestuje, zda
+				jich je $N$ (pokud je v~$L$ u~všech položek {\tt .zdo.k} prázdný
+				řetězec, pak se požaduje dvojnásobná velikost $L$ oproti $N$ a
+				položky se berou po dvou); pokud je $N$ nula, pak se spojuje
+				první atom s~posledním a $L$ se neuvádí
+
+		\priklad{MOL::INC(\$3.mol,\$2.int,\$1.zdo);MOL::INC(\$3,\#0);}
+
+	\prikaz{MVV($rm$,$S_1$,$S_2$,$S_3$,$S_4$)} -- v~$rm$ přesune vazbu mezi
+				$S_1$ a $S_2$ na vazbu mezi $S_3$ a $S_4$
+
+		\priklad{MOL::MVV(\$10,\$1.zdo.z,\$3.zdo.z,\$1.zdo.z,\$5.zdo.z);}
+
+	\prikaz{ION($rm$,$Z$)} -- do torza skeletu $rm$ přidá (ve smyslu součtu)
+				náboj $Z$
+
+		\priklad{MOL::ION(\$1.mol,\#-2);}
+
+	\prikaz{APL($rm_1$,$rm_2$,$N$[,$L$])} -- v~$rm_1$ aplikuje vše platné
+				z~$rm_2$ (nesmí být atomy, jen vazba, náboj, arita, \dots) na
+				pozice $L$ (kterých se otestuje, jestli je $N$); pokud $rm_2$
+				obsahuje i vazbu, která není volná (nevede do~{\tt 0}), pak má
+				tato druhý konec buď dle $L$ v~{\tt .zdo.k}, nebo v~následujícím
+				prvku po {\tt .zdo.z}; pokud $L$ chybí, tak se aplikuje dle $N$
+				na všechny atomy v~$rm_1$ (pokud jich je $N$), pokud je $N$ o~1
+				menší, pak je vynechán poslední atom, pokud je $N = 1$, tak se
+				aplikuje na první atom
+
+		\priklad{MOL::APL(\$1.mol,\$6.mol,\$5.int,\$3.zdo);}
+
+	\prikaz{APP($rm_1$,$rm_2$,$N$,$L$)} -- za atomy $rm_1$ (do $rm_1$) připojí
+				$rm_2$ a spojí první atom $rm_2$ s~atomem dle $L$ (kde), toto
+				provede pro všechny po\-lož\-ky $L$ (otestuje, zda jich je $N$)
+
+		\priklad{MOL::APP(\$5.mol,\$4.mol,\$3.int,\$1.zdo);}
+
+	\prikaz{CON($rm_1$,$rm_2$,$N$[,$L$])} -- za atomy $rm_1$ (do $rm_1$) připojí
+				$rm_2$ a spojí všechny volné vazby $rm_2$ s~atomem dle $L$, toto
+				provede pro všechny položky $L$ (otestuje, zda jich je $N$),
+				pokud $L$ není definován, pak se připojení provede $N$-krát na
+				atom {\tt \til{}1\til{}}
+
+		\priklad{MOL::CON(\$5,\$4,\$3,\$1);}
+
+	\prikaz{COI($rm_1$,$rm_2$,$N$[,$L$])} -- za atomy $rm_1$ (do $rm_1$) připojí
+				$rm_2$ a spojí první volnou vazbu $rm_2$ s~atomem dle $L$, toto
+				provede pro všechny položky $L$ (otestuje, zda jich je $N$),
+				pokud $L$ není definován, pak se připojení provede $N$-krát na
+				atom {\tt \til{}1\til{}}
+
+		\priklad{MOL::COI(\$5,\$4,\$3,\$1);}
+
+	\prikaz{LIN($rm_1$,$rm_2$,$N$)} -- vezme $rm_2$, dá ji $N$-krát za sebe
+				(spojí vždy první atom nové kopie s~posledním atomem předchozí
+				kopie), s~tím, že v~každé kopii zruší všechna jména, výsledek
+				uloží do $rm_1$ a očísluje (od jedničky)
+
+		\priklad{MOL::LIN(\$0.mol,\$0.mol,\$1.mol);}
+
+	\prikaz{CHN($rm_1$,$rm_2$,$N$[,$L$])} -- vezme $rm_2$, dá ji $N$-krát za
+				sebe, s~tím, že v~každé kopii mají všechny lokanty přidánu čárku
+				(oproti předchozí kopii), a poté spojí dvojice dle $L$ (pokud je
+				uvedeno, jinak atomy se jménem {\tt 1} a počtem čárek lišícím se
+				o~jedna, tj. {\tt 1-1'}, {\tt 1'-1"}, \dots) jednoduchou vazbou
+
+		\priklad{MOL::CHN(\$0.mol,\$2.mol,\$1.int);}
+
+	\prikaz{ADD($rm_1$,$rm_2$,$N$)} -- k~torzu skeletu $rm_1$, přidá $N$-krát
+				torzo skeletu $rm_2$ (tj.~sečtou se náboje a sloučí se seznamy
+				vazeb)
+
+		\priklad{MOL::ADD(\$0.mol,\$2.mol,\#1);}
+
+	\prikaz{FIN($rm$)} -- doplní každému atomu vodíky tak, aby mu nic nechybělo
+				$\left( vaznost = \left(\sum_{(vazby)}nasobnost\right) + \left|naboj\right|\right)$,
+				pokud toto splnit nelze, tj.~vaznost atomu je nižší, než počet jeho
+				vazeb, je vyvolána chyba
+
+		\priklad{MOL::FIN(\$1.mol);}
+
+\end{itemize}

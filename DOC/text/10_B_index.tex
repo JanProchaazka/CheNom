@@ -1,0 +1,35 @@
+\chapter{index.htm}
+
+\begin{kodblok}
+<\klic{!DOCTYPE HTML PUBLIC
+ "-//W3C//DTD HTML 4.01 Transitional//EN"}>
+<\klic{html}>
+<\klic{head}>
+<\klic{meta} http-equiv="content-type"
+      content="text/html; charset=windows-1250" />
+<\klic{title}>CheNom - \underline{$NAZEV$}</\klic{title}>
+<\klic{style}>
+  \koment{/* popis formátování */}
+  \komentH{...}
+</\klic{style}>
+<\klic{script}>
+  \koment{/* javascript obsluhující tlačítka formuláře */}
+  \komentH{...}
+</\klic{script}>
+</\klic{head}>
+<\klic{body}>
+\koment{<!-- tlačítko na ukončení serveru -->}
+<\klic{div} class="konec"><a href="/STOP">KONEC</a></\klic{div}>
+\koment{<!-- formulář pro zadání dotazu -->}
+<\klic{form} action="/chenom"              method="GET"
+      enctype="multipart/form-data" name="formular" >
+  <\klic{input} type="textarea" value="\underline{$NAZEV*$}" name="mol" id="vstup" />
+  <\klic{input} type="submit" value="Zobrazit" id="odeslat" />
+  \koment{<!--tlačítka pro formátování a vkládání spec. znaků -->}
+  \komentH{...}
+</\klic{form}>
+<\klic{hr} />
+<\klic{h1}>\underline{$NAZEV$}</\klic{h1}> \underline{$TELO$}
+</\klic{body}>
+</\klic{html}>
+\end{kodblok}

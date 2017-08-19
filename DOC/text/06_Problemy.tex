@@ -1,0 +1,97 @@
+\chapter{Problémy implementace}
+Je zřejmé, že není možné implementovat obecnou a úplnou interpretaci organického
+názvosloví. Při práci na programu CheNom však byla vyvinuta snaha o~možnost
+pozdějšího rozšíření o všechny (více či méně dobrovolně) opomenuté aspekty a to
+nejlépe bez nutnosti měnit kód programu (a tedy rekompilovat), ale pouhým
+zásahem do datových souborů. Z~tohoto přístupu vyplynuly následující problémy.
+
+\section{Přidávání triviálních názvů}
+Protože není možné do programu zanést všechny triviální názvy, je nutné umožnit
+jejich co nejsnazší přidávání. Tento požadavek přinesl několik komplikací.
+Modifikace zdrojového kódu programu rozhodně není snadné přidání. Je tedy nutné
+toto provádět ve vnějším (datovém) souboru. Nejedná se však pouze o triviální
+názvy, uživatel může potřebovat přidat třeba funkční skupinu. Pak je tedy
+potřeba umístit do vnějšího souboru celou gramatiku. Tím odpadá možnost využití
+pomocných nástrojů jako \todo{flex} či \todo{bison}. Navíc je nutné v~tomto souboru
+s~gramatikou popsat sémantiku jednotlivých pravidel. Pro tento jazyk je nutné
+vytvořit interpret, a proto je vhodné vytvořit malý, snadno analyzovatelný
+jazyk s~výrazovými prostředky přesně vytvořenými pro potřeby popisu sémantiky
+názvotvorných operací.
+
+\section{Třída jazyka organické chemie}
+Existence úprav jako nahrazení koncovky ,,-ová kyselina" koncovkou ,,-át" nebo
+vkládání infixů do názvů (např. záměnný infix ,,-imido-") dělá jazyk organické
+chemie výrazně kontextovým. Tato skutečnost velice komplikuje jak lexikální, tak
+syntaktickou analýzu. Situaci neprospívá ani nejednoznačnost pravidel. Například
+pravidlo R-0.1.7.3 popisuje vkládání ,,o" následovně: \citace{Pro lepší
+výslovnost a libozvučnost se někdy mezi souhlásky předpony vkládá samohláska
+\todo{-o-}}~\cite{Kahovec:modrakniha}. Také obraty jako \citace{zvažuje komise} nebo
+\citace{bude popsáno v~budoucí publikaci} nejsou
+výjimečné~\cite{Kahovec:modrakniha}.
+
+Některé z~těchto problémů se podařilo odstranit v~lexikální analýze. Jako součást
+lokantů v~názvosloví kondenzovaných polycyklů se používají písmena latinky. Při
+bezkontextovém zpracování je tak možné rozdělit každý název tak, že jednomu
+tokenu odpovídá jeden znak. Částečně lze tomuto zabránit tím, že se místo
+obvyklé varianty použití prvního (nejkratšího) nalezeného tokenu použije
+nejdelší. I tak by ale například analýza názvu ,,methan" vrátila tokeny ,,metha"
+a ,,n". Kontextové pravidlo umožňující vrátit token odpovídající jednomu písmenu
+latinky pouze v~případě, že předchozí token nekončí písmenem, řeší i tento
+nedostatek. Dalším kontextovým pravidlem uplatněným v~lexikální analýze je již
+zmíněné vypouštění a vkládání samohlásek.
+
+Problémy s~kontextovostí infixových názvotvorných operací se nepodařilo
+odstranit, a proto bylo od jejich implementace upuštěno.
+
+Syntaktická analýza byla zvolena pro co nejširší třídu jazyků a tedy
+bezkontextová nedeterministická na způsob \todo{Q-systémů}.
+
+\section{Názvy činící komplikace}
+Sestavení gramatiky názvosloví organické chemie tak, aby pokud možno
+ne\-ob\-sa\-ho\-va\-la žádné konflikty (a to ani po jejím rozšiřování) je velmi náročné.
+Například \chem{HI} lze označit jako jodan, \chem{I-} pak jako jodyl. Jodid se
+zdá být obdobou jodylu a tedy \chem{I^-}. Ve skutečnosti je však jodid název
+charakteristické skupiny \chem{I-} a pro \chem{I^-} je přípustné pouze označení
+jodanid.
+
+Větším problémem je spojení ,,karboxylová kyselina". Jak je totiž me\-tha\-n\-al a
+methylaldehyd dvojí označení téhož, tak v~důsledku shody funkčního skupinového
+názvu a substituční přípony charakteristické skupiny před\-sta\-vu\-jí názvy
+,,methankarboxylová kyselina" a ,,methylkarboxylová kyselina" tutéž sloučeninu.
+Ovšem byla-li by chápána druhá varianta ve smyslu první, pak by byla na
+připojovaném uhlíku vytvořena nevyužitá volná vazba (v~ta\-ko\-vém případě by bylo
+správnější označení ,,1-oylmethylkarboxylová kyselina").
+
+Mnoho komplikací činí také několik skupin názvů, které se mohou zdát při
+nejmenším zavádějící. To samozřejmě komplikuje i jejich automatické zpracování.
+Patří mezi ně například:
+\begin{itemize}
+	\itemB{ethylen} (\chem{-CH_2-CH_2-}) -- není možné interpretovat jako
+					  ethenyl (též vinyl, \chem{CH_2=CH-}).
+	\itemB{rhodanid} -- jedná se o zastaralé označení pro thiokyanát a souvislost
+					   s~rhodiem je jen zdánlivá.
+	\itemB{rhodanin} -- synonymum pro 2-thioxothiazolidin-4-on, tedy opět
+					   žádné rhodium.
+	\itemB{per} -- infix ,,-peroxo-" znamená náhradu \chem{-O-} za \chem{-O-O-},
+				 ale ,,per" samo o sobě má význam zcela, takže předpona
+				 ,,perhydro-" vyjadřuje proces nasycení všech vazeb. Druhý
+				 z~významů je však podle do\-po\-ru\-če\-ní 1993 již zastaralý a neměl
+				 by se tedy užívat.
+	\itemB{S} -- označuje stereodeskriptor chirálních sloučenin, ale také se
+				jedná o značku síry.
+	\itemB{fluoren} -- triviální název tricyklické sloučeniny, který může budit
+					  dojem fluoru a dvojné vazby.
+	\itemB{propadien} -- tento název sice není zavádějící, přesto je problematický
+					 -- ,,dien" je totiž ekvivalentní název pro ethen. ,,propa-"
+					 je pak možné chápat jako předponu.
+\end{itemize}
+
+\section{Konstituce, konfigurace, konformace}
+Implementována musí být konstituce, protože jeden sumární vzorec může označovat
+velké množství látek naprosto odlišných vlastností. Aby mohla být implementována
+konfigurace, je nutné správně modelovat (nemá smysl řešit, zda má být atom
+umístěn nad nebo pod rovinou cyklu, pokud je při modelování umístěn do této
+roviny). Stejně jako konfigurace ani konformace nebyly implementovány. Hlavní
+důvod je ten, že v~drtivé většině případů nemá názvosloví nástroje je od sebe
+odlišit (například vaničková a židličková konformace cyklohexanu).
+

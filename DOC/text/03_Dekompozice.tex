@@ -1,0 +1,43 @@
+\chapter{Dekompozice}
+Protože je program rozsáhlý a jeden z~vytyčených cílů byla modularita, byl
+rozčleněn na několik relativně (až na datové struktury a nutný interface)
+nezávislých částí. Svou koncepcí se program blíží překladači.
+
+Vstup je nejprve zpracován modulem \modul{Scanner} (lexikální analýza), který ho
+rozdělí na tokeny a vrací jejich číselné kódy definované v~souboru
+\soubor{terminaly.gra}. Navíc řeší základní kontextové problémy (vypouštění a vkládání
+samohlásek), k~čemuž využívá soubor \soubor{konstanty.txt}. Tokeny vstupují jako
+terminály do dalšího modulu zvaného \modul{Parser} (syntaktická analýza). Zde je
+z~nich vystavěn derivační strom dle gramatiky v~souboru \soubor{gramatika.gra}.
+V~tomto souboru navíc následuje za každým pravidlem sekvence instrukcí, které se
+v~případě použití pravidla aplikují v~příslušném uzlu. To zajistí modul
+\modul{Semantika} (sémantická analýza). Výstupem tohoto modulu je již graf
+molekuly. Ten je třeba umístit do prostoru, aby vznikl model, což zajišťuje
+modul \modul{Model}, který pomocí volání modulu \modul{Grafika} zajistí i výstup
+ve for\-má\-tu VRML \cite{Zrzavy:vrml} s~parametry definovanými v~souborech
+\soubor{prvky.gra} (zde jsou veškeré potřebné parametry jednotlivých prvků --
+náboj, váha, přípustné elektronové konfigurace, poloměr a barva) a
+\soubor{sablona.wrl} (zde je uložena celá hlavička výsledného dokumentu, to
+znamená Viewpoints, uzly PROTO pro atomy a vazby, zvolené kódování, atd.).
+
+Jména všech použitých souborů jsou definována v~souboru \soubor{settings.ini},
+který program dostane jako parametr.
+
+Pro větší uživatelovo pohodlí byla implementována dvě rozhraní. Konzolový skript
+\soubor{run-console.bat} (popř. \soubor{run-console.sh}) přijímá název molekuly
+jako parametr a vytvořený VRML model zobrazí v~aplikaci asociované s~příponou
+,,wrl". Druhý interface pak tvoří jednoduchý HTTP server, který přijímá dotazy
+na stránku s~modelem molekuly, poté zavolá skript \soubor{run.bat}
+(popř. \soubor{run.sh})
+s~názvem v~parametru. Pokud takový ještě nebyl vytvořen, tak ho vytvoří (pomocí
+volání výše popsaného jádra) a vrátí stránku, která model obsahuje.
+
+Z~výše uvedeného je zřejmé, že program potřebuje pro svou plnohodnotnou práci
+buď plugin pro zobrazování VRML do nějakého internetového prohlížeče (v~případě
+užití druhého interface) nebo jakýkoliv jiný program schopný interpretace VRML
+souborů (v~případě užití prvního -- ale v~podstatě i druhého -- interface).
+
+\begin{figure}
+	\imgbox{dekompozice}
+	\caption{Schéma zapojení programových modulů a jejich komunikace}
+\end{figure}

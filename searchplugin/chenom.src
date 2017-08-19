@@ -1,0 +1,31 @@
+# Mozilla/chenom plug-in by hypiz@centrum.cz
+
+<search
+   name="CheNom"
+   description="Chemical Nomenclature"
+   method="GET"
+   action="http://localhost/chenom"
+   searchForm="http://localhost/chenom"
+   queryEncoding="utf-8"
+   queryCharset="utf-8"
+>
+
+<input name="mol" user>
+<inputprev>
+
+<interpret
+   browserResultType="result"
+   charset="UTF-8"
+   resultListStart="<!--a-->"
+   resultListEnd="<!--z-->"
+   resultItemStart="<h1>"
+   resultItemEnd="</h1>"
+>
+
+</search>
+
+<browser
+   update="http://it.janprochazka.name/chenom/chenom.src"
+   updateIcon="http://it.janprochazka.name/chenom/chenom.gif"
+   updateCheckDays="3"
+>
