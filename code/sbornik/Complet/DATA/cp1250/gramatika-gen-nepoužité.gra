@@ -1,0 +1,319 @@
+--------------------------------------------------------------------------------------------------------------
+-- žøáòú // to jen kvuli cestine;)
+nazev		:== skelet	+{MOL::FIN($1);MOL::CPY($1);}		//kompletace skeletu (zaverecne testy, doplneni vodiku, ...)
+			  ;
+-- cela procedura sestavovani nazvu je zde:
+skelet		:== tohle_je_tmp_gramatika_nepouzivat ----------------------------------------- R.1.2.2.1 (zamena nevodiku)
+			  --|-------------------------------------------------------------------------- R.1.2.2.2 (zamena kysliku)
+			  --| ???								+{}		//zamenne infixy ???
+			  --|-------------------------------------------------------------------------- R.1.2.3.3 (adice-skupinovy nazev) ???-lokanty
+			  | skelet_skup_nazev					+{}		//-oxid
+			  --|-------------------------------------------------------------------------- R.1.2.3.4 (adice-pomlcka) ???, ???-lokanty
+			  --| nazev+'-'+nazev 					+{}		//oxid uhelnatý-boran
+			  --|-------------------------------------------------------------------------- R.1.2.3.5 (adice-skladani) ???-lokanty
+			  | skelet+skelet						+{}		//chlorkarbonyl
+			  | skelet+pocet+skelet					+{}		//ethylendiimino
+			  | pref_nasob+skelet					+{}		//bifenyl
+			  --|-------------------------------------------------------------------------- R.1.2.4.1 (konjunkce-spoj.nazvu)
+			  | nazev+nazev							+{!!!}	//cyklohexanethanol
+			  | nazev+'-'+lokant+'-'+nazev			+{}		//cyklohexan-2-ethanol
+			  | nazev+pocet+nazev					+{}		//cyklohexandiethanol
+			  | nazev+'-'+lokanty+'-'+pocet+nazev	+{}		//cyklohexan-1,3-diethanol
+			  --|-------------------------------------------------------------------------- R.1.2.5.1 (subtrakce-predpona)
+			  | 'de'+skelet+skelet					+{}		//demethyl-
+			  | pocet+'de'+skelet+skelet			+{}		//dideoxy-
+			  | lokant+'-'+'de'+skelet+skelet		+{}		//6-deoxy-
+			  | lokanty+'-'+pocet+'de'+skelet+skelet	+{}	//6,7-dideoxy-
+			  --|--------------------------------------------------------------------------
+			  | 'anhydro'+skelet					+{}		//anhydro-
+			  --| pocet+'anhydro'+skelet				+{}		//dianhydro- -- nelze !!!
+			  | lokant2+'-'+'anhydro'+skelet		+{}		//2,3-anhydro-
+			  | lokanty2+'-'+pocet+'anhydro'+skelet	+{}		//2,3:4,5-dianhydro-
+			  --|--------------------------------------------------------------------------
+			  --| des ???
+			  --|-------------------------------------------------------------------------- R.1.2.7.2 (posun dvojnych vazeb / revers poradi aminokyselin)
+			  | lokant2+'-'+'<i>'+'retro'+'</i>'+skelet	+{} //6',7-retro-<beta/>-karoten
+			  --|-------------------------------------------------------------------------- R.1.2.8.1-2 (nasobne -vicevazne substituenty)
+			  | skelet+pocet+skelet					+{}		//nitriltrioctová kyselina
+			  | lokanty+skelet+pocet+skelet			+{}		//4,4'-methylendibenzoová kyselina
+			  --|-------------------------------------------------------------------------- R.1.2.8.3 (nasobne -substituenty)
+			  --| //viz R.1.2.1
+-------------------------------------------------------------------------------------------
+			  --|-------------------------------------------------------------------------- R.2.3 (monocykly)
+			  --| //viz R.1.2.6.1															R.2.3.1.1
+			  | '['+cislo+']'+'annulen'				+{}		//[10]annulen					R.2.3.1.2
+			  | lokant+'<i>'+'H'+'</i>'+'-'+'['+cislo+']'+'annulen'	+{}	//1H-[9]annulen		R.2.3.1.2
+			  --| //viz R.1.2.6.1															R.2.3.2
+			  --| //slozite ???								//1,4-thiazepin					R.2.3.3 (heterocykly)
+			  --| //slozite ??? .. R.2.4.4, viz R.1.2.4.2									R.2.4 (polycykly)
+-------------------------------------------------------------------------------------------
+			  --|-------------------------------------------------------------------------- R.3.1.3
+			  | lokanty2a+'-'+pocet+'de'+'hydro'+skelet		+{}	//2,3,4,5-tetradehydro-
+			  ;
+
+------------------------------------------------------------------------------------------- R.1.2.3.1 (aditivní pøedpony)
+pref_adit	:== 'homo'								+{}		//4a-homopregnan
+			  | halogen								+{}		//chlor-
+			  ;
+------------------------------------------------------------------------------------------- R.3.4 (zámìnné pøedpony)
+pref_zamen	:== a_pref_zamen								+{MOL::CPY($1);}	//fluora-
+			  | pref_funkcne_zamen							+{MOL::CPY($1);}	//thio-
+			  ;
+pref_funkcne_zamen	:== 'amido'								+{}
+					  | 'azido'								+{}
+					  | 'imido'								+{}
+					  | 'thio'								+{}
+
+					  | 'seleno'							+{}
+					  | 'telluro'							+{}
+
+					  | halogen+'ido'						+{}
+					  | 'nitr'+'ido'							+{}
+					  | 'hydr'+'az'+'ido'					+{}
+					  | 'kyanat'+'ido'						+{}
+					  | 'iso'+'kyanat'+'ido'				+{}
+					  | 'iso'+'kyan'+'ido'					+{}
+					  | 'thio'+'kyanat'+'ido'				+{}
+					  | 'iso'+'thio'+'kyanat'+'ido'			+{}
+
+					  | 'di'+'thio'+'per'+'oxo'				+{}
+					  | 'per'+'oxo'							+{}
+					  | 'thio'+'per'+'oxo'					+{}
+					  ;
+
+------------------- R.9.3 (a-pøedpony pro zámìnné názvosloví)
+a_pref_zamen	:== 'fluora'		+{MOL::NWA(~F~);}	//F
+				  | 'chlora'		+{MOL::NWA(~Cl~);}	//Cl
+				  | 'broma'			+{MOL::NWA(~Br~);}	//Br
+				  | 'joda'			+{MOL::NWA(~I~);}	//I
+				  | 'astata'		+{MOL::NWA(~At~);}	//At
+				  | 'oxa'			+{MOL::NWA(~O~);}	//O
+				  | 'thia'			+{MOL::NWA(~S~);}	//S
+				  | 'selena'		+{MOL::NWA(~Se~);}	//Se
+				  | 'tellura'		+{MOL::NWA(~Te~);}	//Te
+				  | 'aura'			+{MOL::NWA(~Au~);}	//Au
+				  | 'nikela'		+{MOL::NWA(~Ni~);}	//Ni
+				  | 'pallada'		+{MOL::NWA(~Pd~);}	//Pd
+				  | 'platina'		+{MOL::NWA(~Pt~);}	//Pt
+				  | 'kobalta'		+{MOL::NWA(~Co~);}	//Co
+				  | 'rhoda'			+{MOL::NWA(~Rh~);}	//Rh
+				  | 'irida'			+{MOL::NWA(~Ir~);}	//Ir
+				  | 'ferra'			+{MOL::NWA(~Fe~);}	//Fe
+				  | 'ruthena'		+{MOL::NWA(~Ru~);}	//Ru
+				  | 'europa'		+{MOL::NWA(~Eu~);}	//Eu
+				  | 'gadolina'		+{MOL::NWA(~Gd~);}	//Gd
+				  | 'terba'			+{MOL::NWA(~Tb~);}	//Tb
+				  | 'dysprosa'		+{MOL::NWA(~Dy~);}	//Dy
+				  | 'holma'			+{MOL::NWA(~Ho~);}	//Ho
+				  | 'erba'			+{MOL::NWA(~Er~);}	//Er
+				  | 'thula'			+{MOL::NWA(~Tm~);}	//Tm
+				  | 'ytterba'		+{MOL::NWA(~Yb~);}	//Yb
+				  | 'luteta'		+{MOL::NWA(~Lu~);}	//Lu
+				  ;
+
+suc3		:== 'ný'				+{}	// (1,
+			  | 'natý'				+{}	// (2,
+			  | 'itý'				+{}	// (3,
+			  | 'ièitý'				+{}	// (4,
+			  | 'ièný'				+{}	// (5,
+			  | 'eèný'				+{}	// (5,
+			  | 'ový'				+{}	// (6,
+			  | 'istý'				+{}	// (7,
+			  | 'ièelý'				+{}	// (8,
+			  -- ...
+			  | 'ná'					+{}	// (1,
+			  | 'natá'					+{}	// (2,
+			  | 'itá'					+{}	// (3,
+			  | 'ièitá'					+{}	// (4,
+			  | 'ièná'					+{}	// (5,
+			  | 'eèná'					+{}	// (5,
+			  | 'ová'					+{}	// (6,
+			  | 'istá'					+{}	// (7,
+			  | 'ièelá'					+{}	// (8,
+			  -- ...
+			  | 'né'					+{}	// (1,
+			  | 'naté'					+{}	// (2,
+			  | 'ité'					+{}	// (3,
+			  | 'ièité'					+{}	// (4,
+			  | 'ièné'					+{}	// (5,
+			  | 'eèné'					+{}	// (5,
+			  | 'ové'					+{}	// (6,
+			  | 'isté'					+{}	// (7,
+			  | 'ièelé'					+{}	// (8,
+			  ;
+vaznost		:== '<lambda/>'+'<sup>'+cislo+'</sup>'		+{}	// lambda^[1-oo]
+			  ;
+kumulace	:== '<delta/>'+'<sup>'+cislo+'</sup>'		+{}	// kumulace "=" v cyklech
+			  ;
+----------------------------------- LOKANTY ------------------------------------
+stereo		:== 'cis'					+{}
+			  | 'trans'					+{}
+			  | 'meso'					+{}
+			  | 'E'						+{}
+			  | 'Z'						+{}
+			  | 'R'						+{}
+			  | 'S'						+{}
+			  | 'P'						+{}
+			  | 'M'						+{}
+			  ;
+recke		:== '<alfa/>'				+{STR::NEW(~<alfa/>~);}
+			  | '<beta/>'				+{STR::NEW(~<beta/>~);}
+			  | '<gamma/>'				+{STR::NEW(~<gamma/>~);}
+			  | '<delta/>'				+{STR::NEW(~<delta/>~);}
+			  | '<epsilon/>'			+{STR::NEW(~<epsilon/>~);}
+			  | '<dzeta/>'				+{STR::NEW(~<dzeta/>~);}
+			  | '<eta/>'				+{STR::NEW(~<eta/>~);}
+			  | '<theta/>'				+{STR::NEW(~<theta/>~);}
+			  | '<iota/>'				+{STR::NEW(~<iota/>~);}
+			  | '<kappa/>'				+{STR::NEW(~<kappa/>~);}
+			  | '<lambda/>'				+{STR::NEW(~<lambda/>~);}
+			  | '<mi/>'					+{STR::NEW(~<mi/>~);}
+			  | '<ni/>'					+{STR::NEW(~<ni/>~);}
+			  | '<xi/>'					+{STR::NEW(~<xi/>~);}
+			  | '<omikron/>'			+{STR::NEW(~<omikron/>~);}
+			  | '<pi/>'					+{STR::NEW(~<pi/>~);}
+			  | '<ro/>'					+{STR::NEW(~<ro/>~);}
+			  | '<sigma/>'				+{STR::NEW(~<sigma/>~);}
+			  | '<tau/>'				+{STR::NEW(~<tau/>~);}
+			  | '<ypsilon/>'			+{STR::NEW(~<ypsilon/>~);}
+			  | '<fi/>'					+{STR::NEW(~<fi/>~);}
+			  | '<chi/>'				+{STR::NEW(~<chi/>~);}
+			  | '<psi/>'				+{STR::NEW(~<psi/>~);}
+			  | '<omega/>'				+{STR::NEW(~<omega/>~);}
+			  ;
+latinske	:== 'a'						+{STR::NEW(~a~);}
+			  | 'b'						+{STR::NEW(~b~);}
+			  | 'c'						+{STR::NEW(~c~);}
+			  | 'd'						+{STR::NEW(~d~);}
+			  | 'e'						+{STR::NEW(~e~);}
+			  | 'f'						+{STR::NEW(~f~);}
+			  | 'g'						+{STR::NEW(~g~);}
+			  | 'h'						+{STR::NEW(~h~);}
+			  | 'i'						+{STR::NEW(~i~);}
+			  | 'j'						+{STR::NEW(~j~);}
+			  | 'k'						+{STR::NEW(~k~);}
+			  | 'l'						+{STR::NEW(~l~);}
+			  | 'm'						+{STR::NEW(~m~);}
+			  | 'n'						+{STR::NEW(~n~);}
+			  | 'o'						+{STR::NEW(~o~);}
+			  | 'p'						+{STR::NEW(~p~);}
+			  | 'q'						+{STR::NEW(~q~);}
+			  | 'r'						+{STR::NEW(~r~);}
+			  | 's'						+{STR::NEW(~s~);}
+			  | 't'						+{STR::NEW(~t~);}
+			  | 'u'						+{STR::NEW(~u~);}
+			  | 'v'						+{STR::NEW(~v~);}
+			  | 'w'						+{STR::NEW(~w~);}
+			  | 'x'						+{STR::NEW(~x~);}
+			  | 'y'						+{STR::NEW(~y~);}
+			  | 'z'						+{STR::NEW(~z~);}
+			  ;
+----------------------------------- PRVKY  -------------------------------------
+prvek		:== '<i>'+znprvku+'</i>'	+{MOL::CPY($1);}	// H-Ns
+			  ;
+znprvku		:== 'H'						+{MOL::NWA(~H~);}	// 001 - vodik
+			  | 'He'					+{MOL::NWA(~He~);}	// 002 - helium
+			  | 'Li'					+{MOL::NWA(~Li~);}	// 003 - litium
+			  | 'Be'					+{MOL::NWA(~Be~);}	// 004 - berilium
+			  | 'B'						+{MOL::NWA(~B~);}	// 005 - bor
+			  | 'C'						+{MOL::NWA(~C~);}	// 006 - uhlik
+			  | 'N'						+{MOL::NWA(~N~);}	// 007 - dusik
+			  | 'O'						+{MOL::NWA(~O~);}	// 008 - kyslik
+			  | 'F'						+{MOL::NWA(~F~);}	// 009 - fluor
+			  | 'Ne'					+{MOL::NWA(~Ne~);}	// 010 - neon
+			  | 'Na'					+{MOL::NWA(~Na~);}	// 011 - sodik
+			  | 'Mg'					+{MOL::NWA(~Mg~);}	// 012 - horcik
+			  | 'Al'					+{MOL::NWA(~Al~);}	// 013 - hlinik
+			  | 'Si'					+{MOL::NWA(~Si~);}	// 014 - kremik
+			  | 'P'						+{MOL::NWA(~P~);}	// 015 - fosfor
+			  | 'S'						+{MOL::NWA(~S~);}	// 016 - sira
+			  | 'Cl'					+{MOL::NWA(~Cl~);}	// 017 - chlor
+			  | 'Ar'					+{MOL::NWA(~Ar~);}	// 018 - argon
+			  | 'K'						+{MOL::NWA(~K~);}	// 019 - draslik
+			  | 'Ca'					+{MOL::NWA(~Ca~);}	// 020 - vapnik
+			  | 'Sc'					+{MOL::NWA(~Sc~);}	// 021 - skandium
+			  | 'Ti'					+{MOL::NWA(~Ti~);}	// 022 - titan
+			  | 'V'						+{MOL::NWA(~V~);}	// 023 - vanad
+			  | 'Cr'					+{MOL::NWA(~Cr~);}	// 024 - chrom
+			  | 'Mn'					+{MOL::NWA(~Mn~);}	// 025 - mangan
+			  | 'Fe'					+{MOL::NWA(~Fe~);}	// 026 - zelezo
+			  | 'Co'					+{MOL::NWA(~Co~);}	// 027 - kobalt
+			  | 'Ni'					+{MOL::NWA(~Ni~);}	// 028 - nikl
+			  | 'Cu'					+{MOL::NWA(~Cu~);}	// 029 - med
+			  | 'Zn'					+{MOL::NWA(~Zn~);}	// 030 - zinek
+			  | 'Ga'					+{MOL::NWA(~Ga~);}	// 031 - gallium
+			  | 'Ge'					+{MOL::NWA(~Ge~);}	// 032 - germanium
+			  | 'As'					+{MOL::NWA(~As~);}	// 033 - arzen
+			  | 'Se'					+{MOL::NWA(~Se~);}	// 034 - selen
+			  | 'Br'					+{MOL::NWA(~Br~);}	// 035 - brom
+			  | 'Kr'					+{MOL::NWA(~Kr~);}	// 036 - krypton
+			  | 'Rb'					+{MOL::NWA(~Rb~);}	// 037 - rubodium
+			  | 'Sr'					+{MOL::NWA(~Sr~);}	// 038 - stroncium
+			  | 'Y'						+{MOL::NWA(~Y~);}	// 039 - yttrium
+			  | 'Zr'					+{MOL::NWA(~Zr~);}	// 040 - zirkonium
+			  | 'Nb'					+{MOL::NWA(~Nb~);}	// 041 - niob
+			  | 'Mo'					+{MOL::NWA(~Mo~);}	// 042 - molybden
+			  | 'Tc'					+{MOL::NWA(~Tc~);}	// 043 - technecium
+			  | 'Ru'					+{MOL::NWA(~Ru~);}	// 044 - ruthenium
+			  | 'Rh'					+{MOL::NWA(~Rh~);}	// 045 - rhodium
+			  | 'Pd'					+{MOL::NWA(~Pd~);}	// 046 - palladium
+			  | 'Ag'					+{MOL::NWA(~Ag~);}	// 047 - stribro
+			  | 'Cd'					+{MOL::NWA(~Cd~);}	// 048 - kadmium
+			  | 'In'					+{MOL::NWA(~In~);}	// 049 - indium
+			  | 'Sn'					+{MOL::NWA(~Sn~);}	// 050 - cin
+			  | 'Sb'					+{MOL::NWA(~Sb~);}	// 051 - antimon
+			  | 'Te'					+{MOL::NWA(~Te~);}	// 052 - tellur
+			  | 'I'						+{MOL::NWA(~I~);}	// 053 - jod
+			  | 'Xe'					+{MOL::NWA(~Xe~);}	// 054 - xenon
+			  | 'Cs'					+{MOL::NWA(~Cs~);}	// 055 - cesium
+			  | 'Ba'					+{MOL::NWA(~Ba~);}	// 056 - barium
+			  | 'La'					+{MOL::NWA(~La~);}	// 057 - lanthan
+			  | 'Ce'					+{MOL::NWA(~Ce~);}	// 058 - cer
+			  | 'Pr'					+{MOL::NWA(~Pr~);}	// 059 - praseodym
+			  | 'Nd'					+{MOL::NWA(~Nd~);}	// 060 - neodym
+			  | 'Pm'					+{MOL::NWA(~Pm~);}	// 061 - promethium
+			  | 'Sm'					+{MOL::NWA(~Sm~);}	// 062 - samarium
+			  | 'Eu'					+{MOL::NWA(~Eu~);}	// 063 - europium
+			  | 'Gd'					+{MOL::NWA(~Gd~);}	// 064 - gadolinium
+			  | 'Tb'					+{MOL::NWA(~Tb~);}	// 065 - terbium
+			  | 'Dy'					+{MOL::NWA(~Dy~);}	// 066 - dysprosium
+			  | 'Ho'					+{MOL::NWA(~Ho~);}	// 067 - holmium
+			  | 'Er'					+{MOL::NWA(~Er~);}	// 068 - erbium
+			  | 'Tm'					+{MOL::NWA(~Tm~);}	// 069 - thulium
+			  | 'Yb'					+{MOL::NWA(~Yb~);}	// 070 - ytterbium
+			  | 'Lu'					+{MOL::NWA(~Lu~);}	// 071 - lutecium
+			  | 'Hf'					+{MOL::NWA(~Hf~);}	// 072 - hafnium
+			  | 'Ta'					+{MOL::NWA(~Ta~);}	// 073 - tantal
+			  | 'W'						+{MOL::NWA(~W~);}	// 074 - wolfram
+			  | 'Re'					+{MOL::NWA(~Re~);}	// 075 - rhenium
+			  | 'Os'					+{MOL::NWA(~Os~);}	// 076 - osmium
+			  | 'Ir'					+{MOL::NWA(~Ir~);}	// 077 - iridium
+			  | 'Pt'					+{MOL::NWA(~Pt~);}	// 078 - platina
+			  | 'Au'					+{MOL::NWA(~Au~);}	// 079 - zlato
+			  | 'Hg'					+{MOL::NWA(~Hg~);}	// 080 - rtut
+			  | 'Tl'					+{MOL::NWA(~Tl~);}	// 081 - thallium
+			  | 'Pb'					+{MOL::NWA(~Pb~);}	// 082 - olovo
+			  | 'Bi'					+{MOL::NWA(~Bi~);}	// 083 - bismut
+			  | 'Po'					+{MOL::NWA(~Po~);}	// 084 - polonium
+			  | 'At'					+{MOL::NWA(~At~);}	// 085 - astat
+			  | 'Rn'					+{MOL::NWA(~Rn~);}	// 086 - radon
+			  | 'Fr'					+{MOL::NWA(~Fr~);}	// 087 - francium
+			  | 'Ra'					+{MOL::NWA(~Ra~);}	// 088 - radium
+			  | 'Ac'					+{MOL::NWA(~Ac~);}	// 089 - aktinium
+			  | 'Th'					+{MOL::NWA(~Th~);}	// 090 - thorium
+			  | 'Pa'					+{MOL::NWA(~Pa~);}	// 091 - protaktinium
+			  | 'U'						+{MOL::NWA(~U~);}	// 092 - uran
+			  | 'Np'					+{MOL::NWA(~Np~);}	// 093 - neptunium
+			  | 'Pu'					+{MOL::NWA(~Pu~);}	// 094 - plutonium
+			  | 'Am'					+{MOL::NWA(~Am~);}	// 095 - americium
+			  | 'Cm'					+{MOL::NWA(~Cm~);}	// 096 - curium
+			  | 'Bk'					+{MOL::NWA(~Bk~);}	// 097 - berkelium
+			  | 'Cf'					+{MOL::NWA(~Cf~);}	// 098 - kalifornium
+			  | 'Es'					+{MOL::NWA(~Es~);}	// 099 - einsteinium
+			  | 'Fm'					+{MOL::NWA(~Fm~);}	// 100 - fermium
+			  | 'Md'					+{MOL::NWA(~Md~);}	// 101 - mendelevium
+			  | 'No'					+{MOL::NWA(~No~);}	// 102 - nobelium
+			  | 'Lr'					+{MOL::NWA(~Lr~);}	// 103 - lawrencium
+			  | 'Ku'					+{MOL::NWA(~Ku~);}	// 104 - kurcatovium
+			  | 'Ns'					+{MOL::NWA(~Ns~);}	// 105 - nielsbohrium
+			  ;

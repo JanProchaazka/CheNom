@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chenom", "chenom.vcproj", "{7D8D2058-8978-4B1A-8C85-23D87B11C453}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D8D2058-8978-4B1A-8C85-23D87B11C453}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7D8D2058-8978-4B1A-8C85-23D87B11C453}.Debug|Win32.Build.0 = Debug|Win32
+		{7D8D2058-8978-4B1A-8C85-23D87B11C453}.Release|Win32.ActiveCfg = Release|Win32
+		{7D8D2058-8978-4B1A-8C85-23D87B11C453}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

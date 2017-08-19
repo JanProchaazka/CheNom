@@ -1,0 +1,8 @@
+# seznam neterminálù:
+cat DATA/gramatika.gra | sed -n "s/^\([a-zA-Z_][a-zA-Z0-9_]*\)[ \t]*:==.*$/\1/p" > DATA/neterminaly.gra
+
+# seznam terminulù:
+cat DATA/gramatika.gra | tr "+" "\n" | sed -n     "s/^[^']*\('.*'\)[^']*$/\1/p"    > DATA/terminaly.gra
+
+# switch na lexikalni elementy:
+cat DATA/prac.gra | sed -n "s/#define \([^ \t]*\).*\/\*[ \t]*\(.*\)[ \t]*\*\//\t\t\tcase \1:\n\t\t\tcout<<"\2";/p">DATA/prac_out.gra

@@ -1,0 +1,56 @@
+##
+## Initialize variables
+##
+HADRY=./src/h
+TELA=./src
+
+## CFLAGS+=-I${HADRY}
+CFLAGS+=-Wall -I${HADRY}
+
+##
+## Final build of the program
+##
+
+chenom: err.o grafika.o instrukce.o lexval.o main.o model.o parser.o scanner.o semantika.o utils.o
+	${CXX} ${LDFLAGS} -o Complet\chenom err.o grafika.o instrukce.o lexval.o main.o model.o parser.o scanner.o semantika.o utils.o
+
+##
+## Source moduls
+##
+
+err.o: ${HADRY}/err.hpp ${HADRY}/utils.hpp ${TELA}/err.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/err.cpp
+
+grafika.o: ${HADRY}/grafika.hpp ${TELA}/grafika.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/grafika.cpp
+
+instrukce.o: ${HADRY}/instrukce.hpp ${TELA}/instrukce.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/instrukce.cpp
+
+lexval.o: ${HADRY}/lexval.hpp ${TELA}/err.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/lexval.cpp
+
+main.o: ${HADRY}/main.hpp ${HADRY}/err.hpp ${HADRY}/scanner.hpp ${HADRY}/parser.hpp ${HADRY}/semantika.hpp ${HADRY}/model.hpp ${TELA}/main.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/main.cpp
+
+model.o: ${HADRY}/model.hpp ${TELA}/model.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/model.cpp
+
+parser.o: ${HADRY}/parser.hpp ${TELA}/parser.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/parser.cpp
+
+scanner.o: ${HADRY}/scanner.hpp ${TELA}/scanner.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/scanner.cpp
+
+semantika.o: ${HADRY}/semantika.hpp ${TELA}/semantika.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/semantika.cpp
+
+utils.o: ${HADRY}/utils.hpp ${TELA}/utils.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/utils.cpp
+
+##
+## Clean up
+##
+
+clean:
+	rm -f *.o chenom

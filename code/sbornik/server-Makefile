@@ -1,0 +1,32 @@
+##
+## Initialize variables
+##
+HADRY=./src/h
+TELA=./src
+
+## CFLAGS+=-I${HADRY}
+CFLAGS+=-Wall -I${HADRY}
+
+##
+## Final build of the program
+##
+
+server: server.o utils.o
+	${CXX} ${LDFLAGS} -o Complet/server server.o utils.o
+
+##
+## Source moduls
+##
+
+server.o: utils.o
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/server.cpp
+
+utils.o: ${HADRY}/utils.hpp ${TELA}/utils.cpp
+	${CXX} ${CPPFLAGS} ${CFLAGS} -o $@ -c ${TELA}/utils.cpp
+
+##
+## Clean up
+##
+
+clean:
+	rm -f *.o Complet/server

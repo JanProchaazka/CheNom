@@ -1,0 +1,28 @@
+ 0000-0006 - Separator (.,,,:,;,-,->)
+ 0007-0007 - Carka (',")
+ 0008-0019 <
+ 0020-0029 - Zavorka ((,),[,],{,})
+ 0030-0039 - Operace (de,nor,anhydro,cyklo,seko,abeo,retro)
+ 0040-0049 <
+ 0050-0059 - Formatovani (<i>,<sub>,...)
+ 0060-0099 <
+ 0100-0199 - CharakteristickaSkupina (yl,an,en,yn,...)
+ 0200-0299 - Stereodeskriptory (cis,trans,meso,...)
+ 0300-0499 <
+ 0500-0529 - AnorgPripona (ný,natý,...)
+ 0530-0999 <
+ 1000-1009 - Cislice (0123456789)
+ 1010-1099 <
+ 1100-1199 - Alfabeta (<alfa/><beta/>...)
+ 1200-1229 - Latinka (abcd...)
+ 1230-1249 - Samohlaska (aáeéěiíoóuúůyý)
+ 1250-1399 <
+ 1400-1433 - ReckePocty (#lokantů--přidat_násobnost_lokantů,..)
+ 1434-1499 - LatinskePocty (počty_opakování_struktur,...)
+ 1500-1999 <
+ 2000-2199 - ZnackaPrvku (H,He,...)
+ 2200-2999 - JmenoPrvku (oxa,sila,...)
+ 3000-3999 - TypSlouceniny (aren,oxokyselina,keton,...)
+ 4000-4999 - TrivKoren (bora,oxida,joda,metha,...)
+ 5000-9999 - TrivNazvy (acetylen,ethan,...)
+

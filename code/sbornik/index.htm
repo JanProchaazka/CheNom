@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1250">
+<link rel="shortcut icon" href="CheNom.png">
+<meta name="author" content="Jan Procházka" />
+<title>CheNom - $NAZEV$</title>
+<style>
+	div a{
+		color:				black;
+		text-decoration:	none;
+		font-weight:		bold;
+	}
+	body{
+		color:				white;
+		background-color:	black;
+	}
+	p{
+		color:				yellow;
+	}
+	h1{
+		color:				yellow;
+	}
+	#ikona{
+		height:				0.7em;
+		width:				0.7em;
+	}
+	input{
+		cursor:				hand;
+/*		width:				25px;/**/
+		height:				2em; /*22px;/**/
+		padding:			1px 5px 1px 5px; /**/
+		margin:				0px -1px 5px 0px; /**/
+		color:				yellow;
+		background-color:	green;
+		text-align:			center;
+		display:			inline;
+		font-family:		monospace;
+		border:				1px white solid;
+	}
+
+	.format{
+		background-color:	blue;
+		font-weight:		bold;
+	}
+
+	.vystup{
+		width:				100%;
+		height:				100%;
+	}
+	#vstup{
+		width:				100%;
+		text-align:			left;
+		background-color:	white;
+		font-weight:		bold;
+		color:				black;
+		cursor:				text;
+	}
+	#odeslat{
+		align:				right;
+		width:				8em; /*80px;/**/
+		background-color:	lightgrey;
+		color:				black;
+		font-weight:		bold;
+	}
+	.error{
+		background-color:	white;
+		color:				red;
+		font-family:		monospace;
+		font-weight:		bold;
+	}
+	.konec{
+		position:			absolute;
+		top:				0px;
+		right:				1px;
+		width:				4em;
+		text-align:			center;
+		background-color:	red;
+		border:				1px white solid;
+	}
+</style>
+
+<script>
+	var ital, subik, supik
+//http://diskuse.jakpsatweb.cz/index.php?action=vthread&forum=3&topic=44430 .. upraveno
+	function pis(txt){
+		CIL = document.formular.mol;
+		// pro prohlížeče postavené na jádře Gecko
+		if (CIL.selectionStart || CIL.selectionStart == 0) {
+			startPos = CIL.selectionStart;
+			endPos = CIL.selectionEnd;
+			CIL.value = CIL.value.substring(0, startPos) + txt + CIL.value.substring(endPos, CIL.value.length);
+			CIL.selectionStart = startPos + txt.length;
+			CIL.selectionEnd   = startPos + txt.length;
+		}else
+		// pro IE a jiné prohlížeče, které podporují "document.selection"
+		if (document.selection) {
+			CIL.focus();
+			vyber = document.selection.createRange();
+			vyber.text = txt;
+		}else
+			CIL.value += txt;
+		// ještě jiné jádro -> prostě na konec
+
+		CIL.focus();
+	}
+
+	function oprav(){
+		CIL = document.formular.mol;
+		CIL.value = CIL.value.replace(' ','&nbsp;');
+	}
+</script>
+</head>
+
+<body onLoad="ital=0;subik=0;supik=0;" >
+<p>Zde vyplňte jméno molekuly určené k&nbsp;zobrazení:</p>
+<div class="konec"><a href="/STOP" title="ukončí server" >KONEC</a></div>
+
+
+<form action="/chenom" method="GET" enctype="multipart/form-data" name="formular"
+	onSubmit="oprav()"
+>
+	<input type="textarea" value="$NAZEV*$" name="mol" id="vstup" />
+	<input type="submit" value="Zobrazit" id="odeslat" />
+	  <input title="kurzíva"     type="button" class="format" style="font-style: italic;" onClick="if(ital==0){pis('&lt;i&gt;');this.style.color='red';}else{pis('&lt;/i&gt;');this.style.color='yellow';}ital=1-ital;" value="i"
+	/><input title="dolní index" type="button" class="format" onClick="if(subik==0){pis('&lt;sub&gt;');this.style.color='red';}else{pis('&lt;/sub&gt;');this.style.color='yellow';}subik=1-subik;" value="sub"
+	/><input title="horní index" type="button" class="format" onClick="if(supik==0){pis('&lt;sup&gt;');this.style.color='red';}else{pis('&lt;/sup&gt;');this.style.color='yellow';}supik=1-supik;" value="sup"
+	/><input title="mezera"      type="button" class="format" onClick="pis('&amp;nbsp;');" value="_" />
+<br />
+	<input type="button"   onClick="pis('&amp;alpha;');" value="&alpha;"
+	/><input type="button" onClick="pis('&amp;beta;');" value="&beta;"
+	/><input type="button" onClick="pis('&amp;gamma;');" value="&gamma;"
+	/><input type="button" onClick="pis('&amp;delta;');" value="&delta;"
+	/><input type="button" onClick="pis('&amp;epsilon;');" value="&epsilon;"
+	/><input type="button" onClick="pis('&amp;zeta;');" value="&zeta;"
+	/><input type="button" onClick="pis('&amp;eta;');" value="&eta;"
+	/><input type="button" onClick="pis('&amp;theta;');" value="&theta;"
+	/><input type="button" onClick="pis('&amp;iota;');" value="&iota;"
+	/><input type="button" onClick="pis('&amp;kappa;');" value="&kappa;"
+	/><input type="button" onClick="pis('&amp;lambda;');" value="&lambda;"
+	/><input type="button" onClick="pis('&amp;mu;');" value="&mu;"
+	/><input type="button" onClick="pis('&amp;nu;');" value="&nu;"
+	/><input type="button" onClick="pis('&amp;xi;');" value="&xi;"
+	/><input type="button" onClick="pis('&amp;omikron;');" value="&omicron;"
+	/><input type="button" onClick="pis('&amp;pi;');" value="&pi;"
+	/><input type="button" onClick="pis('&amp;rho;');" value="&rho;"
+	/><input type="button" onClick="pis('&amp;sigma;');" value="&sigma;"
+	/><input type="button" onClick="pis('&amp;tau;');" value="&tau;"
+	/><input type="button" onClick="pis('&amp;upilon;');" value="&upsilon;"
+	/><input type="button" onClick="pis('&amp;phi;');" value="&phi;"
+	/><input type="button" onClick="pis('&amp;chi;');" value="&chi;"
+	/><input type="button" onClick="pis('&amp;psi;');" value="&psi;"
+	/><input type="button" onClick="pis('&amp;omega;');" value="&omega;" />
+</form>
+
+<hr />
+
+<h1>$NAZEV$</h1>
+$TELO$
+
+</body>
+</html>
