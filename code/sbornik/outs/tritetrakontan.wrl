@@ -1,0 +1,2525 @@
+#VRML V2.0 utf8
+NavigationInfo { type "EXAMINE" }
+################################### pohledy ###################################
+Viewpoint {
+	position 0 0 50
+	description "above"
+}
+Viewpoint {
+	position -50 0 0
+	orientation 0 1 0 -1.571
+	description "left"
+}
+Viewpoint {
+	position 0 -50 0
+	orientation 1 0 0 1.571
+	description "front"
+}
+
+################################# atom - vzor #################################
+###############################################################################
+PROTO Atom[
+		field SFColor dCol 1.0 1.0 1.0
+		field SFFloat fRad 1.
+	  ]{
+	Transform{
+		children[
+			Shape{
+				geometry Sphere {
+					radius .5					#polomer vnitrni casti
+				}
+				appearance
+					Appearance{
+						material Material {
+							diffuseColor IS dCol
+							transparency 0.		#vnitrni cast - viditelnost
+						}
+					}
+			}
+			Shape{
+				geometry Sphere {
+					radius IS fRad
+				}
+				appearance
+					Appearance{
+						material Material {
+							diffuseColor IS dCol
+							transparency .5		#vnejsi cast - viditelnost
+						}
+					}
+			}
+		]
+	}
+}
+
+################################ vazby - vzory ################################
+###############################################################################
+PROTO Spoj[
+		field SFColor dCol 1.0 1.0 1.0
+		field SFFloat fLen 2.
+		field SFVec3f fPos 0 1 0.	#0 fLen/2 0
+		field SFFloat fRad .5
+	  ]{
+	Transform{
+		translation IS fPos
+		children[
+			Shape{
+				geometry Cylinder {
+					height IS fLen
+					radius IS fRad
+				}
+				appearance
+				Appearance{
+					material Material {
+						diffuseColor IS dCol
+						transparency 0
+					}
+				}
+			}
+		]
+	}
+}
+
+PROTO Vazba1 [
+		field SFFloat fDist 2.
+		field SFVec3f fPoz  0 1 0.
+	  ]{
+	Spoj {
+		dCol 1.0 1.0 1.0
+		fLen IS fDist
+		fPos IS fPoz
+	}
+}
+
+PROTO Vazba2 [
+		field SFFloat fDist 2.
+		field SFVec3f fPoz  0 1 0.
+	  ]{
+	Transform{
+		children[
+			Transform{
+				translation .16666666 0 0
+				children Spoj {
+					dCol 0 1 1
+					fRad .33333333
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+			Transform{
+				translation -.16666666 0 0
+				children Spoj {
+					dCol 0 1 1
+					fRad .33333333
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+		]
+	}
+}
+
+PROTO Vazba3 [
+		field SFFloat fDist 2.
+		field SFVec3f fPoz  0 1 0.
+	  ]{
+	Transform{
+		children [
+			Transform{
+				translation .22474487139159 0 0
+				children Spoj {
+					dCol 1 0 1
+					fRad .27525512860841
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+			Transform{
+				translation -.1123724356958 0 -.19463476799539
+				children Spoj {
+					dCol 1 0 1
+					fRad .27525512860841
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+			Transform{
+				translation -.1123724356958 0  .19463476799539
+				children Spoj {
+					dCol 1 0 1
+					fRad .27525512860841
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+		]
+	}
+}
+###############################################################################
+
+PROTO Prvek_C []{
+	Atom{
+		dCol 1.00000000 0. 0.
+		fRad 1.00000000
+	}
+}
+
+PROTO Prvek_H []{
+	Atom{
+		dCol 0. 0. 1.00000000
+		fRad 1.00000000
+	}
+}
+
+###############################################################################
+Transform{
+	children [
+		Transform{
+			translation -15.88689652 23.70308763 538.54933431
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -25.77032553 23.58510467 496.38906966
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -40.23820807 22.87015674 422.87346028
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -54.24215440 21.26751187 321.41330306
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -63.54010787 16.75207561 204.21445968
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -76.75002733 15.80452792 115.70800661
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -96.15411627 18.87714454 65.45001457
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -112.71985592 20.99033708 49.88688860
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -123.28107303 24.73177513 39.78738041
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -133.71098134 26.71200459 27.45166036
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -139.11867014 25.50150115 14.22576653
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -137.10293538 22.37781052 -.72763028
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -126.06730217 18.97336813 -11.50170675
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -112.34860271 15.80469943 -16.32191517
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -97.82913492 12.77449618 -17.33560936
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -83.80315288 9.36689062 -17.43881998
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -70.31607663 6.31625001 -17.81073455
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -56.12139810 3.66005497 -19.37502419
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -41.60002338 1.23378483 -22.13182492
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -27.00665705 -1.30963266 -24.05834072
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -12.16907096 -4.28198891 -25.70865573
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 3.12900808 -7.09391257 -27.27759750
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 18.49787763 -10.37660069 -28.38877048
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 33.76741886 -13.21030912 -29.99236087
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 49.08828665 -15.78911192 -32.10730454
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 64.52591979 -17.77282381 -34.40799596
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 79.83109029 -19.01655093 -36.01382362
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 94.42982185 -19.86954507 -37.66612595
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 108.58452409 -19.95990535 -39.34445628
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 121.52940525 -18.48422331 -41.61555900
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 133.35822629 -15.69878299 -44.44410209
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 145.38666066 -12.83288771 -47.05749932
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 158.47436905 -9.63465094 -48.51555786
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 171.67415098 -6.46994095 -49.21577384
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 184.21702203 -4.03561980 -47.80937858
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 195.03888458 -2.88825320 -42.81194883
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 203.28150502 -1.33923493 -35.10053819
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 209.20913123 -2.21270588 -25.86406180
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 215.92178767 -5.02302528 -17.25816863
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 222.11536796 -11.18599215 -10.43147194
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 226.87438673 -20.19038843 -7.42553017
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 229.59090777 -29.86632551 -6.80941579
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation 233.00271694 -37.69968386 -5.89717282
+			children [
+				Prvek_C {}
+			]
+		}
+		Transform{
+			translation -15.65852732 24.52773966 547.03813633
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -16.23599712 23.93145263 545.07140615
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -19.07725137 24.43800529 544.39411692
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -28.21897395 21.61438368 502.15464002
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -27.14490916 24.90099233 503.33189122
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -38.90980643 24.03676895 428.81830854
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -38.24477047 23.56124900 429.36036882
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -55.97811718 20.82487175 327.64509384
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -54.95954566 24.67200871 326.25181351
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -67.32371379 14.96112080 198.52755514
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -68.87877665 16.45636938 202.95745250
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -75.13154308 14.71525585 105.43833791
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -71.87103852 15.45073020 107.11997306
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -101.61158758 17.10941431 60.76630381
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -101.75267460 21.24902342 63.80348090
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -111.21034450 19.64913102 45.04143738
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -112.65521082 21.46585862 45.77569749
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -126.28759428 22.87097655 36.56698391
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -118.70488123 23.94148094 41.61371033
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -135.29122450 24.12846439 32.36432039
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -137.12907585 30.68860121 31.07069410
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -141.93861583 20.32028856 11.95461084
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -144.53139303 24.98909182 12.41493771
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -141.18791505 21.11137767 -2.59916929
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -135.82635595 23.80541294 -5.33656074
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -122.49466446 19.48149146 -14.22322046
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -129.76232821 16.53070717 -14.51302047
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -108.96255909 12.29042983 -16.12828719
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -112.89930715 18.87978836 -20.26783584
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -94.92634595 13.28479663 -13.39993588
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -97.16557302 13.68690825 -21.89504089
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -83.20207353 6.71202437 -13.55660893
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -85.54655755 13.44119999 -15.95328497
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -67.15425023 8.67646786 -15.40649418
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -74.25004932 5.94086877 -15.28188377
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -60.46877685 1.88064496 -19.57658542
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -56.48482810 6.12539978 -15.33436911
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -43.71874651 4.56912521 -19.71302026
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -43.48526416 -3.06403757 -22.26527476
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -24.35038932 1.68257135 -26.49146568
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -27.81281162 -5.87019156 -23.57859911
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -13.77059501 -7.26409906 -28.95945524
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -9.00689584 -1.82128180 -27.93398138
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 5.21219561 -3.37358225 -29.24365576
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 3.80372478 -6.39878076 -31.90701912
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 17.77352848 -14.74258147 -26.73276802
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 20.82169253 -12.90154314 -31.56384028
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 30.52629584 -15.96629038 -31.74605570
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 37.50113919 -15.76175686 -29.12785788
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 48.84681296 -18.12058789 -28.06946995
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 53.13059262 -16.76955874 -33.91123327
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 64.64427991 -21.58356944 -37.20207156
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 61.90860651 -16.72724619 -30.81280225
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 82.50271582 -18.09066105 -32.30728032
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 77.85253747 -19.31924237 -31.74421878
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 95.10148404 -19.18259037 -33.15352956
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 96.17704932 -19.19721920 -42.12320666
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 110.24876150 -24.45270949 -40.23448215
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 113.14806998 -20.50477463 -39.36636033
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 125.57763799 -18.94837449 -39.05487069
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 123.90847319 -22.72220382 -41.14066474
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 129.88105499 -13.45097839 -42.43086664
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 133.90175068 -20.19541127 -45.64996367
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 145.79419829 -11.12847170 -42.70912289
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 141.75705011 -15.07082556 -49.14505708
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 160.72257434 -9.80763611 -52.60222192
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 157.21817117 -5.32658338 -47.34538815
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 168.21684750 -3.83422036 -50.39812796
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 170.18513020 -5.85874563 -53.87579815
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 183.88816705 .35831252 -50.11638072
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 186.08709621 -7.43337063 -50.87347602
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 196.98265292 -7.50011229 -42.85815402
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 199.27783811 -3.14544669 -45.33326286
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 198.94942101 -2.17407302 -34.30226132
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 204.24699742 3.45564465 -36.16746671
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 210.31344502 2.56502857 -25.47465391
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 206.07561892 .06657081 -22.80289449
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 215.18557504 -.84761975 -14.67254549
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 220.35600200 -3.49316025 -17.83966924
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 222.02206717 -8.34574990 -6.25442391
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 223.94542043 -6.82152468 -9.60903740
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 228.38837681 -20.19012962 -2.87247354
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 231.04667504 -19.53116280 -4.93540662
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 225.53876447 -27.55772422 -5.20265065
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 231.15146184 -31.88989480 -2.71230705
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 235.22765933 -42.03674870 -6.77703020
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 231.08523348 -42.25908861 -4.51514652
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation 235.57402475 -40.97134532 -2.99468568
+			children [
+				Prvek_H {}
+			]
+		}
+		Transform{
+			translation -15.88689652 23.70308763 538.54933431
+			children [
+				Transform{
+					rotation -42.16026464 0. 9.88342901 1.57352089
+					children Vazba1 {
+						fDist 43.30339483
+						fPoz  0 21.65169741 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -15.88689652 23.70308763 538.54933431
+			children [
+				Transform{
+					rotation 8.48880202 0. -.22836919 1.47398914
+					children Vazba1 {
+						fDist 8.53182063
+						fPoz  0 4.26591031 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -15.88689652 23.70308763 538.54933431
+			children [
+				Transform{
+					rotation 6.52207184 0. .34910059 1.53584643
+					children Vazba1 {
+						fDist 6.53539922
+						fPoz  0 3.26769961 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -15.88689652 23.70308763 538.54933431
+			children [
+				Transform{
+					rotation 5.84478261 0. 3.19035484 1.46087361
+					children Vazba1 {
+						fDist 6.69925009
+						fPoz  0 3.34962504 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -25.77032553 23.58510467 496.38906966
+			children [
+				Transform{
+					rotation -73.51560938 0. 14.46788253 1.58033812
+					children Vazba1 {
+						fDist 74.92913717
+						fPoz  0 37.46456858 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -25.77032553 23.58510467 496.38906966
+			children [
+				Transform{
+					rotation 5.76557036 0. 2.44864841 1.87560294
+					children Vazba1 {
+						fDist 6.56669033
+						fPoz  0 3.28334516 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -25.77032553 23.58510467 496.38906966
+			children [
+				Transform{
+					rotation 6.94282156 0. 1.37458362 1.38697207
+					children Vazba1 {
+						fDist 7.19887573
+						fPoz  0 3.59943786 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -40.23820807 22.87015674 422.87346028
+			children [
+				Transform{
+					rotation -101.46015721 0. 14.00394633 1.58644251
+					children Vazba1 {
+						fDist 102.43457660
+						fPoz  0 51.21728830 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -40.23820807 22.87015674 422.87346028
+			children [
+				Transform{
+					rotation 5.94484826 0. -1.32840163 1.38157155
+					children Vazba1 {
+						fDist 6.20216541
+						fPoz  0 3.10108270 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -40.23820807 22.87015674 422.87346028
+			children [
+				Transform{
+					rotation 6.48690854 0. -1.99343760 1.46930970
+					children Vazba1 {
+						fDist 6.82139167
+						fPoz  0 3.41069583 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -54.24215440 21.26751187 321.41330306
+			children [
+				Transform{
+					rotation -117.19884338 0. 9.29795346 1.60918477
+					children Vazba1 {
+						fDist 117.65377169
+						fPoz  0 58.82688584 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -54.24215440 21.26751187 321.41330306
+			children [
+				Transform{
+					rotation 6.23179077 0. 1.73596277 1.63911398
+					children Vazba1 {
+						fDist 6.48418948
+						fPoz  0 3.24209474 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -54.24215440 21.26751187 321.41330306
+			children [
+				Transform{
+					rotation 4.83851044 0. .71739125 .96274900
+					children Vazba1 {
+						fDist 5.95956645
+						fPoz  0 2.97978322 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -63.54010787 16.75207561 204.21445968
+			children [
+				Transform{
+					rotation -88.50645306 0. 13.20991946 1.58138461
+					children Vazba1 {
+						fDist 89.49185467
+						fPoz  0 44.74592733 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -63.54010787 16.75207561 204.21445968
+			children [
+				Transform{
+					rotation -5.68690453 0. 3.78360591 1.82722148
+					children Vazba1 {
+						fDist 7.06145000
+						fPoz  0 3.53072500 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -63.54010787 16.75207561 204.21445968
+			children [
+				Transform{
+					rotation -1.25700718 0. 5.33866877 1.62465935
+					children Vazba1 {
+						fDist 5.49262173
+						fPoz  0 2.74631086 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -76.75002733 15.80452792 115.70800661
+			children [
+				Transform{
+					rotation -50.25799204 0. 19.40408894 1.51382443
+					children Vazba1 {
+						fDist 53.96133249
+						fPoz  0 26.98066624 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -76.75002733 15.80452792 115.70800661
+			children [
+				Transform{
+					rotation -10.26966870 0. -1.61848425 1.67518919
+					children Vazba1 {
+						fDist 10.45332962
+						fPoz  0 5.22666481 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -76.75002733 15.80452792 115.70800661
+			children [
+				Transform{
+					rotation -8.58803354 0. -4.87898880 1.60660069
+					children Vazba1 {
+						fDist 9.88352289
+						fPoz  0 4.94176144 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -96.15411627 18.87714454 65.45001457
+			children [
+				Transform{
+					rotation -15.56312596 0. 16.56573964 1.47809185
+					children Vazba1 {
+						fDist 22.82761929
+						fPoz  0 11.41380964 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -96.15411627 18.87714454 65.45001457
+			children [
+				Transform{
+					rotation -4.68371076 0. 5.45747130 1.81181819
+					children Vazba1 {
+						fDist 7.40580918
+						fPoz  0 3.70290459 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -96.15411627 18.87714454 65.45001457
+			children [
+				Transform{
+					rotation -1.64653366 0. 5.59855832 1.18474570
+					children Vazba1 {
+						fDist 6.29926486
+						fPoz  0 3.14963243 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -112.71985592 20.99033708 49.88688860
+			children [
+				Transform{
+					rotation -10.09950819 0. 10.56121711 1.32014564
+					children Vazba1 {
+						fDist 15.08435385
+						fPoz  0 7.54217692 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -112.71985592 20.99033708 49.88688860
+			children [
+				Transform{
+					rotation -4.84545122 0. -1.50951142 1.82915972
+					children Vazba1 {
+						fDist 5.24936719
+						fPoz  0 2.62468359 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -112.71985592 20.99033708 49.88688860
+			children [
+				Transform{
+					rotation -4.11119111 0. -.06464509 1.45565698
+					children Vazba1 {
+						fDist 4.13910522
+						fPoz  0 2.06955261 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -123.28107303 24.73177513 39.78738041
+			children [
+				Transform{
+					rotation -12.33572004 0. 10.42990830 1.44882069
+					children Vazba1 {
+						fDist 16.27495883
+						fPoz  0 8.13747941 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -123.28107303 24.73177513 39.78738041
+			children [
+				Transform{
+					rotation -3.22039650 0. 3.00652124 1.97043075
+					children Vazba1 {
+						fDist 4.78254064
+						fPoz  0 2.39127032 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -123.28107303 24.73177513 39.78738041
+			children [
+				Transform{
+					rotation 1.82632992 0. -4.57619180 1.72983682
+					children Vazba1 {
+						fDist 4.99014802
+						fPoz  0 2.49507401 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -133.71098134 26.71200459 27.45166036
+			children [
+				Transform{
+					rotation -13.22589382 0. 5.40768879 1.65531196
+					children Vazba1 {
+						fDist 14.33989833
+						fPoz  0 7.16994916 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -133.71098134 26.71200459 27.45166036
+			children [
+				Transform{
+					rotation 4.91266003 0. 1.58024315 2.03494907
+					children Vazba1 {
+						fDist 5.77114173
+						fPoz  0 2.88557086 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -133.71098134 26.71200459 27.45166036
+			children [
+				Transform{
+					rotation 3.61903373 0. 3.41809450 .89676951
+					children Vazba1 {
+						fDist 6.37134961
+						fPoz  0 3.18567480 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -139.11867014 25.50150115 14.22576653
+			children [
+				Transform{
+					rotation -14.95339682 0. -2.01573476 1.77493516
+					children Vazba1 {
+						fDist 15.40859196
+						fPoz  0 7.70429598 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -139.11867014 25.50150115 14.22576653
+			children [
+				Transform{
+					rotation -2.27115569 0. 2.81994568 2.53164976
+					children Vazba1 {
+						fDist 6.32101303
+						fPoz  0 3.16050651 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -139.11867014 25.50150115 14.22576653
+			children [
+				Transform{
+					rotation -1.81082882 0. 5.41272288 1.66033300
+					children Vazba1 {
+						fDist 5.73055262
+						fPoz  0 2.86527631 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -137.10293538 22.37781052 -.72763028
+			children [
+				Transform{
+					rotation -10.77407647 0. -11.03563321 1.78805179
+					children Vazba1 {
+						fDist 15.79418095
+						fPoz  0 7.89709047 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -137.10293538 22.37781052 -.72763028
+			children [
+				Transform{
+					rotation -1.87153901 0. 4.08497967 1.84551911
+					children Vazba1 {
+						fDist 4.66835831
+						fPoz  0 2.33417915 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -137.10293538 22.37781052 -.72763028
+			children [
+				Transform{
+					rotation -4.60893045 0. -1.27657942 1.28070875
+					children Vazba1 {
+						fDist 4.99098624
+						fPoz  0 2.49549312 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -126.06730217 18.97336813 -11.50170675
+			children [
+				Transform{
+					rotation -4.82020841 0. -13.71869945 1.78535658
+					children Vazba1 {
+						fDist 14.88212301
+						fPoz  0 7.44106150 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -126.06730217 18.97336813 -11.50170675
+			children [
+				Transform{
+					rotation -2.72151371 0. -3.57263770 1.45813644
+					children Vazba1 {
+						fDist 4.51979715
+						fPoz  0 2.25989857 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -126.06730217 18.97336813 -11.50170675
+			children [
+				Transform{
+					rotation -3.01131372 0. 3.69502604 2.04435032
+					children Vazba1 {
+						fDist 5.35610123
+						fPoz  0 2.67805061 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -112.34860271 15.80469943 -16.32191517
+			children [
+				Transform{
+					rotation -1.01369418 0. -14.51946778 1.77605678
+					children Vazba1 {
+						fDist 14.86689787
+						fPoz  0 7.43344893 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -112.34860271 15.80469943 -16.32191517
+			children [
+				Transform{
+					rotation .19362798 0. -3.38604361 2.37395934
+					children Vazba1 {
+						fDist 4.88394041
+						fPoz  0 2.44197020 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -112.34860271 15.80469943 -16.32191517
+			children [
+				Transform{
+					rotation -3.94592067 0. .55070444 .91347113
+					children Vazba1 {
+						fDist 5.03286571
+						fPoz  0 2.51643285 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -97.82913492 12.77449618 -17.33560936
+			children [
+				Transform{
+					rotation -.10321062 0. -14.02598204 1.80912210
+					children Vazba1 {
+						fDist 14.43435487
+						fPoz  0 7.21717743 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -97.82913492 12.77449618 -17.33560936
+			children [
+				Transform{
+					rotation 3.93567347 0. -2.90278897 1.46682455
+					children Vazba1 {
+						fDist 4.91692139
+						fPoz  0 2.45846069 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -97.82913492 12.77449618 -17.33560936
+			children [
+				Transform{
+					rotation -4.55943153 0. -.66356190 1.37529657
+					children Vazba1 {
+						fDist 4.69693794
+						fPoz  0 2.34846897 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -83.80315288 9.36689062 -17.43881998
+			children [
+				Transform{
+					rotation -.37191456 0. -13.48707624 1.79316128
+					children Vazba1 {
+						fDist 13.83278548
+						fPoz  0 6.91639274 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -83.80315288 9.36689062 -17.43881998
+			children [
+				Transform{
+					rotation 3.88221104 0. -.60107934 2.16509673
+					children Vazba1 {
+						fDist 4.74143161
+						fPoz  0 2.37071580 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -83.80315288 9.36689062 -17.43881998
+			children [
+				Transform{
+					rotation 1.48553500 0. 1.74340467 .51214250
+					children Vazba1 {
+						fDist 4.67399946
+						fPoz  0 2.33699973 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -70.31607663 6.31625001 -17.81073455
+			children [
+				Transform{
+					rotation -1.56428963 0. -14.19467853 1.75469489
+					children Vazba1 {
+						fDist 14.52553864
+						fPoz  0 7.26276932 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -70.31607663 6.31625001 -17.81073455
+			children [
+				Transform{
+					rotation 2.40424036 0. -3.16182640 1.03465234
+					children Vazba1 {
+						fDist 4.62040542
+						fPoz  0 2.31020271 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -70.31607663 6.31625001 -17.81073455
+			children [
+				Transform{
+					rotation 2.52885077 0. 3.93397269 1.65089141
+					children Vazba1 {
+						fDist 4.69170954
+						fPoz  0 2.34585477 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -56.12139810 3.66005497 -19.37502419
+			children [
+				Transform{
+					rotation -2.75680072 0. -14.52137472 1.73349613
+					children Vazba1 {
+						fDist 14.97855336
+						fPoz  0 7.48927668 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -56.12139810 3.66005497 -19.37502419
+			children [
+				Transform{
+					rotation -.20156123 0. 4.34737875 1.95892339
+					children Vazba1 {
+						fDist 4.70176870
+						fPoz  0 2.35088435 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -56.12139810 3.66005497 -19.37502419
+			children [
+				Transform{
+					rotation 4.04065507 0. .36342999 1.02474753
+					children Vazba1 {
+						fDist 4.74730448
+						fPoz  0 2.37365224 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -41.60002338 1.23378483 -22.13182492
+			children [
+				Transform{
+					rotation -1.92651580 0. -14.59336632 1.74189370
+					children Vazba1 {
+						fDist 14.93809814
+						fPoz  0 7.46904907 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -41.60002338 1.23378483 -22.13182492
+			children [
+				Transform{
+					rotation 2.41880465 0. 2.11872313 .76711025
+					children Vazba1 {
+						fDist 4.63293634
+						fPoz  0 2.31646817 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -41.60002338 1.23378483 -22.13182492
+			children [
+				Transform{
+					rotation -.13344984 0. 1.88524078 2.72729705
+					children Vazba1 {
+						fDist 4.69502067
+						fPoz  0 2.34751033 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -27.00665705 -1.30963266 -24.05834072
+			children [
+				Transform{
+					rotation -1.65031500 0. -14.83758609 1.76732480
+					children Vazba1 {
+						fDist 15.22210242
+						fPoz  0 7.61105121 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -27.00665705 -1.30963266 -24.05834072
+			children [
+				Transform{
+					rotation -2.43312496 0. -2.65626773 .87763793
+					children Vazba1 {
+						fDist 4.68285600
+						fPoz  0 2.34142800 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -27.00665705 -1.30963266 -24.05834072
+			children [
+				Transform{
+					rotation .47974160 0. .80615456 2.93872321
+					children Vazba1 {
+						fDist 4.65604280
+						fPoz  0 2.32802140 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -12.16907096 -4.28198891 -25.70865573
+			children [
+				Transform{
+					rotation -1.56894177 0. -15.29807904 1.75164828
+					children Vazba1 {
+						fDist 15.63328869
+						fPoz  0 7.81664434 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -12.16907096 -4.28198891 -25.70865573
+			children [
+				Transform{
+					rotation -3.25079951 0. 1.60152404 2.25934740
+					children Vazba1 {
+						fDist 4.69313942
+						fPoz  0 2.34656971 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -12.16907096 -4.28198891 -25.70865573
+			children [
+				Transform{
+					rotation -2.22532565 0. -3.16217511 1.00405327
+					children Vazba1 {
+						fDist 4.58328541
+						fPoz  0 2.29164270 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 3.12900808 -7.09391257 -27.27759750
+			children [
+				Transform{
+					rotation -1.11117297 0. -15.36886955 1.78069570
+					children Vazba1 {
+						fDist 15.75477382
+						fPoz  0 7.87738691 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 3.12900808 -7.09391257 -27.27759750
+			children [
+				Transform{
+					rotation -1.96605826 0. -2.08318753 .65614369
+					children Vazba1 {
+						fDist 4.69530755
+						fPoz  0 2.34765377 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 3.12900808 -7.09391257 -27.27759750
+			children [
+				Transform{
+					rotation -4.62942161 0. -.67471670 1.42329012
+					children Vazba1 {
+						fDist 4.72969294
+						fPoz  0 2.36484647 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 18.49787763 -10.37660069 -28.38877048
+			children [
+				Transform{
+					rotation -1.60359038 0. -15.26954122 1.75330664
+					children Vazba1 {
+						fDist 15.61282468
+						fPoz  0 7.80641234 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 18.49787763 -10.37660069 -28.38877048
+			children [
+				Transform{
+					rotation 1.65600245 0. .72434915 2.74908065
+					children Vazba1 {
+						fDist 4.72533745
+						fPoz  0 2.36266872 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 18.49787763 -10.37660069 -28.38877048
+			children [
+				Transform{
+					rotation -3.17506979 0. -2.32381489 2.14133277
+					children Vazba1 {
+						fDist 4.67509553
+						fPoz  0 2.33754776 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 33.76741886 -13.21030912 -29.99236087
+			children [
+				Transform{
+					rotation -2.11494367 0. -15.32086779 1.73601484
+					children Vazba1 {
+						fDist 15.67967476
+						fPoz  0 7.83983738 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 33.76741886 -13.21030912 -29.99236087
+			children [
+				Transform{
+					rotation -1.75369482 0. 3.24112302 2.21292741
+					children Vazba1 {
+						fDist 4.60171236
+						fPoz  0 2.30085618 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 33.76741886 -13.21030912 -29.99236087
+			children [
+				Transform{
+					rotation .86450299 0. -3.73372033 2.15815733
+					children Vazba1 {
+						fDist 4.60411973
+						fPoz  0 2.30205986 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 49.08828665 -15.78911192 -32.10730454
+			children [
+				Transform{
+					rotation -2.30069141 0. -15.43763313 1.69721334
+					children Vazba1 {
+						fDist 15.73368395
+						fPoz  0 7.86684197 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 49.08828665 -15.78911192 -32.10730454
+			children [
+				Transform{
+					rotation 4.03783458 0. .24147369 2.09366540
+					children Vazba1 {
+						fDist 4.66885402
+						fPoz  0 2.33442701 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 49.08828665 -15.78911192 -32.10730454
+			children [
+				Transform{
+					rotation -1.80392873 0. -4.04230596 1.78876933
+					children Vazba1 {
+						fDist 4.53383638
+						fPoz  0 2.26691819 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 64.52591979 -17.77282381 -34.40799596
+			children [
+				Transform{
+					rotation -1.60582766 0. -15.30517049 1.65143932
+					children Vazba1 {
+						fDist 15.43935826
+						fPoz  0 7.71967913 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 64.52591979 -17.77282381 -34.40799596
+			children [
+				Transform{
+					rotation -2.79407560 0. -.11836011 2.50849670
+					children Vazba1 {
+						fDist 4.72680122
+						fPoz  0 2.36340061 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 64.52591979 -17.77282381 -34.40799596
+			children [
+				Transform{
+					rotation 3.59519370 0. 2.61731328 1.33987051
+					children Vazba1 {
+						fDist 4.56825778
+						fPoz  0 2.28412889 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 79.83109029 -19.01655093 -36.01382362
+			children [
+				Transform{
+					rotation -1.65230232 0. -14.59873156 1.62878987
+					children Vazba1 {
+						fDist 14.71667983
+						fPoz  0 7.35833991 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 79.83109029 -19.01655093 -36.01382362
+			children [
+				Transform{
+					rotation 3.70654330 0. -2.67162553 1.37085910
+					children Vazba1 {
+						fDist 4.66190071
+						fPoz  0 2.33095035 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 79.83109029 -19.01655093 -36.01382362
+			children [
+				Transform{
+					rotation 4.26960484 0. 1.97855282 1.63503140
+					children Vazba1 {
+						fDist 4.71548713
+						fPoz  0 2.35774356 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 94.42982185 -19.86954507 -37.66612595
+			children [
+				Transform{
+					rotation -1.67833033 0. -14.15470223 1.57713559
+					children Vazba1 {
+						fDist 14.25414161
+						fPoz  0 7.12707080 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 94.42982185 -19.86954507 -37.66612595
+			children [
+				Transform{
+					rotation 4.51259639 0. -.67166219 1.42134726
+					children Vazba1 {
+						fDist 4.61373634
+						fPoz  0 2.30686817 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 94.42982185 -19.86954507 -37.66612595
+			children [
+				Transform{
+					rotation -4.45708071 0. -1.74722746 1.43126978
+					children Vazba1 {
+						fDist 4.83429357
+						fPoz  0 2.41714678 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 108.58452409 -19.95990535 -39.34445628
+			children [
+				Transform{
+					rotation -2.27110272 0. -12.94488115 1.45898227
+					children Vazba1 {
+						fDist 13.22518405
+						fPoz  0 6.61259202 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 108.58452409 -19.95990535 -39.34445628
+			children [
+				Transform{
+					rotation -.89002586 0. -1.66423740 2.74390715
+					children Vazba1 {
+						fDist 4.87310181
+						fPoz  0 2.43655090 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 108.58452409 -19.95990535 -39.34445628
+			children [
+				Transform{
+					rotation -.02190405 0. -4.56354588 1.68962846
+					children Vazba1 {
+						fDist 4.59601059
+						fPoz  0 2.29800529 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 121.52940525 -18.48422331 -41.61555900
+			children [
+				Transform{
+					rotation -2.82854308 0. -11.82882104 1.34565661
+					children Vazba1 {
+						fDist 12.47719283
+						fPoz  0 6.23859641 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 121.52940525 -18.48422331 -41.61555900
+			children [
+				Transform{
+					rotation 2.56068831 0. -4.04823274 1.66739223
+					children Vazba1 {
+						fDist 4.81256161
+						fPoz  0 2.40628080 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 121.52940525 -18.48422331 -41.61555900
+			children [
+				Transform{
+					rotation .47489426 0. -2.37906794 2.62168208
+					children Vazba1 {
+						fDist 4.88323332
+						fPoz  0 2.44161666 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 133.35822629 -15.69878299 -44.44410209
+			children [
+				Transform{
+					rotation -2.61339723 0. -12.02843436 1.34204366
+					children Vazba1 {
+						fDist 12.63829237
+						fPoz  0 6.31914618 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 133.35822629 -15.69878299 -44.44410209
+			children [
+				Transform{
+					rotation 2.01323544 0. 3.47717130 1.06073279
+					children Vazba1 {
+						fDist 4.60396163
+						fPoz  0 2.30198081 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 133.35822629 -15.69878299 -44.44410209
+			children [
+				Transform{
+					rotation -1.20586158 0. -.54352438 2.85550911
+					children Vazba1 {
+						fDist 4.68712991
+						fPoz  0 2.34356495 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 145.38666066 -12.83288771 -47.05749932
+			children [
+				Transform{
+					rotation -1.45805853 0. -13.08770839 1.33254227
+					children Vazba1 {
+						fDist 13.55148568
+						fPoz  0 6.77574284 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 145.38666066 -12.83288771 -47.05749932
+			children [
+				Transform{
+					rotation 4.34837642 0. -.40753763 1.19871819
+					children Vazba1 {
+						fDist 4.68822977
+						fPoz  0 2.34411488 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 145.38666066 -12.83288771 -47.05749932
+			children [
+				Transform{
+					rotation -2.08755775 0. 3.62961054 2.06164711
+					children Vazba1 {
+						fDist 4.74766636
+						fPoz  0 2.37383318 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 158.47436905 -9.63465094 -48.51555786
+			children [
+				Transform{
+					rotation -.70021598 0. -13.19978192 1.33580163
+					children Vazba1 {
+						fDist 13.59190695
+						fPoz  0 6.79595347 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 158.47436905 -9.63465094 -48.51555786
+			children [
+				Transform{
+					rotation -4.08666406 0. -2.24820529 1.60786677
+					children Vazba1 {
+						fDist 4.66745906
+						fPoz  0 2.33372953 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 158.47436905 -9.63465094 -48.51555786
+			children [
+				Transform{
+					rotation 1.17016971 0. 1.25619788 .37921543
+					children Vazba1 {
+						fDist 4.63753990
+						fPoz  0 2.31876995 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 171.67415098 -6.46994095 -49.21577384
+			children [
+				Transform{
+					rotation 1.40639526 0. -12.54287105 1.38026448
+					children Vazba1 {
+						fDist 12.85408422
+						fPoz  0 6.42704211 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 171.67415098 -6.46994095 -49.21577384
+			children [
+				Transform{
+					rotation -1.18235411 0. 3.45730347 .94588701
+					children Vazba1 {
+						fDist 4.50532258
+						fPoz  0 2.25266129 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 171.67415098 -6.46994095 -49.21577384
+			children [
+				Transform{
+					rotation -4.66002430 0. 1.48902077 1.44650611
+					children Vazba1 {
+						fDist 4.93016927
+						fPoz  0 2.46508463 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 184.21702203 -4.03561980 -47.80937858
+			children [
+				Transform{
+					rotation 4.99742975 0. -10.82186254 1.47483657
+					children Vazba1 {
+						fDist 11.97511850
+						fPoz  0 5.98755925 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 184.21702203 -4.03561980 -47.80937858
+			children [
+				Transform{
+					rotation -2.30700214 0. .32885498 .48763193
+					children Vazba1 {
+						fDist 4.97363507
+						fPoz  0 2.48681753 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 184.21702203 -4.03561980 -47.80937858
+			children [
+				Transform{
+					rotation -3.06409743 0. -1.87007418 2.32873230
+					children Vazba1 {
+						fDist 4.94273013
+						fPoz  0 2.47136506 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 195.03888458 -2.88825320 -42.81194883
+			children [
+				Transform{
+					rotation 7.71141063 0. -8.24262044 1.43441461
+					children Vazba1 {
+						fDist 11.39324814
+						fPoz  0 5.69662407 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 195.03888458 -2.88825320 -42.81194883
+			children [
+				Transform{
+					rotation -.04620519 0. -1.94376834 2.74261315
+					children Vazba1 {
+						fDist 5.00495899
+						fPoz  0 2.50247949 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 195.03888458 -2.88825320 -42.81194883
+			children [
+				Transform{
+					rotation -2.52131403 0. -4.23895353 1.62289583
+					children Vazba1 {
+						fDist 4.93881564
+						fPoz  0 2.46940782 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 203.28150502 -1.33923493 -35.10053819
+			children [
+				Transform{
+					rotation 9.23647639 0. -5.92762620 1.65021670
+					children Vazba1 {
+						fDist 11.00964123
+						fPoz  0 5.50482061 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 203.28150502 -1.33923493 -35.10053819
+			children [
+				Transform{
+					rotation .79827687 0. 4.33208401 1.75809468
+					children Vazba1 {
+						fDist 4.48343088
+						fPoz  0 2.24171544 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 203.28150502 -1.33923493 -35.10053819
+			children [
+				Transform{
+					rotation -1.06692851 0. -.96549240 .29154547
+					children Vazba1 {
+						fDist 5.00613446
+						fPoz  0 2.50306723 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 209.20913123 -2.21270588 -25.86406180
+			children [
+				Transform{
+					rotation 8.60589316 0. -6.71265643 1.82281236
+					children Vazba1 {
+						fDist 11.27027278
+						fPoz  0 5.63513639 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 209.20913123 -2.21270588 -25.86406180
+			children [
+				Transform{
+					rotation .38940788 0. -1.10431379 .24034923
+					children Vazba1 {
+						fDist 4.91913549
+						fPoz  0 2.45956774 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 209.20913123 -2.21270588 -25.86406180
+			children [
+				Transform{
+					rotation 3.06116730 0. 3.13351231 1.09103171
+					children Vazba1 {
+						fDist 4.93809143
+						fPoz  0 2.46904571 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 215.92178767 -5.02302528 -17.25816863
+			children [
+				Transform{
+					rotation 6.82669669 0. -6.19358029 2.16014195
+					children Vazba1 {
+						fDist 11.08811910
+						fPoz  0 5.54405955 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 215.92178767 -5.02302528 -17.25816863
+			children [
+				Transform{
+					rotation 2.58562313 0. .73621262 .57204950
+					children Vazba1 {
+						fDist 4.96603135
+						fPoz  0 2.48301567 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 215.92178767 -5.02302528 -17.25816863
+			children [
+				Transform{
+					rotation -.58150060 0. -4.43421432 1.24119023
+					children Vazba1 {
+						fDist 4.72661471
+						fPoz  0 2.36330735 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 222.11536796 -11.18599215 -10.43147194
+			children [
+				Transform{
+					rotation 3.00594176 0. -4.75901876 2.58290535
+					children Vazba1 {
+						fDist 10.61899703
+						fPoz  0 5.30949851 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 222.11536796 -11.18599215 -10.43147194
+			children [
+				Transform{
+					rotation 4.17704802 0. .09330078 .97376025
+					children Vazba1 {
+						fDist 5.05207000
+						fPoz  0 2.52603500 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 222.11536796 -11.18599215 -10.43147194
+			children [
+				Transform{
+					rotation .82243454 0. -1.83005246 .43089429
+					children Vazba1 {
+						fDist 4.80354732
+						fPoz  0 2.40177366 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 226.87438673 -20.19038843 -7.42553017
+			children [
+				Transform{
+					rotation .61611438 0. -2.71652104 2.86129145
+					children Vazba1 {
+						fDist 10.06890469
+						fPoz  0 5.03445234 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 226.87438673 -20.19038843 -7.42553017
+			children [
+				Transform{
+					rotation 4.55305662 0. -1.51399007 1.57074238
+					children Vazba1 {
+						fDist 4.79817576
+						fPoz  0 2.39908788 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 226.87438673 -20.19038843 -7.42553017
+			children [
+				Transform{
+					rotation 2.49012355 0. -4.17228830 1.43594530
+					children Vazba1 {
+						fDist 4.90339509
+						fPoz  0 2.45169754 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 229.59090777 -29.86632551 -6.80941579
+			children [
+				Transform{
+					rotation .91224296 0. -3.41180916 2.71803301
+					children Vazba1 {
+						fDist 8.59267898
+						fPoz  0 4.29633949 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 229.59090777 -29.86632551 -6.80941579
+			children [
+				Transform{
+					rotation 1.60676513 0. 4.05214330 1.08374404
+					children Vazba1 {
+						fDist 4.93266657
+						fPoz  0 2.46633328 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 229.59090777 -29.86632551 -6.80941579
+			children [
+				Transform{
+					rotation 4.09710873 0. -1.56055406 2.00321731
+					children Vazba1 {
+						fDist 4.82871221
+						fPoz  0 2.41435610 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 233.00271694 -37.69968386 -5.89717282
+			children [
+				Transform{
+					rotation -.87985738 0. -2.22494239 2.63747387
+					children Vazba1 {
+						fDist 4.95324631
+						fPoz  0 2.47662315 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 233.00271694 -37.69968386 -5.89717282
+			children [
+				Transform{
+					rotation 1.38202629 0. 1.91748345 2.66332792
+					children Vazba1 {
+						fDist 5.13565099
+						fPoz  0 2.56782549 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 233.00271694 -37.69968386 -5.89717282
+			children [
+				Transform{
+					rotation 2.90248713 0. -2.57130781 2.27163667
+					children Vazba1 {
+						fDist 5.07344302
+						fPoz  0 2.53672151 0
+					}
+				}
+			]
+		}
+	]
+}
+

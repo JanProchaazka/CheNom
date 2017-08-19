@@ -1,0 +1,751 @@
+#VRML V2.0 utf8
+NavigationInfo { type "EXAMINE" }
+################################### pohledy ###################################
+Viewpoint {
+	position 0 0 50
+	description "above"
+}
+Viewpoint {
+	position -50 0 0
+	orientation 0 1 0 -1.571
+	description "left"
+}
+Viewpoint {
+	position 0 -50 0
+	orientation 1 0 0 1.571
+	description "front"
+}
+
+################################# atom - vzor #################################
+###############################################################################
+PROTO Atom[
+		field SFColor 	dCol 1.0 1.0 1.0	# barva atomu
+		field SFFloat 	fRad 1.				# polomer atomu
+		field MFString	sSig []				# znacka prvku
+		field MFString	sLoc []				# seznam lokantu atomu
+	  ]{
+	Transform{
+		children[
+			DEF java Script{
+				eventIn		SFBool	popisky
+				eventOut	SFFloat	outputVis
+				eventOut	SFVec3f outputPos
+				url "javascript:
+					function popisky(value){
+						if (value){
+							outputVis = 0.0;
+							outputPos[0] = 0.0;
+							outputPos[1] = 0.0;
+							outputPos[2] = 8.0;
+						}else{
+							outputVis = 0.5;
+							outputPos[0] = 0.0;
+							outputPos[1] = 0.0;
+							outputPos[2] = 1.0;
+						}
+					}
+				"
+			}
+			Billboard{
+				axisOfRotation 0. 0. 0.
+				children[
+					DEF pozice Transform{
+						translation .0 .0 1. # -fRad/2 -fRad/2 fRad
+						children[
+							Shape{
+								geometry Text {
+									string IS sSig
+									fontStyle FontStyle{
+										justify ["MIDDLE","MIDDLE"]
+									}
+								}
+								appearance
+									Appearance{
+										material DEF vzhled Material {
+											diffuseColor 1. .0 .0	#barva popisku
+											transparency 1.
+										}
+									}
+							}
+							Transform{
+								translation .0 -1. .0
+								children[
+									Shape{
+										geometry Text {
+											string IS sLoc
+											fontStyle FontStyle{
+												justify ["BEGIN","TOP"]
+												family ["Palatino Linotype" "Times New Roman"  "Microsoft Sans Serif" ]
+											}
+										}
+										appearance
+											Appearance{
+												material DEF vzhledLoc Material {
+													diffuseColor 0. 1. .0	#barva popisku
+													transparency 1.
+												}
+											}
+									}
+								]
+							}
+						]
+					}
+					Shape{
+						geometry Sphere {
+							radius .5					#polomer vnitrni casti
+						}
+						appearance
+							Appearance{
+								material Material {
+									diffuseColor IS dCol
+									transparency 0.		#vnitrni cast - viditelnost
+								}
+							}
+					}
+					Shape{
+						geometry Sphere {
+							radius IS fRad
+						}
+						appearance
+							Appearance{
+								material Material {
+									diffuseColor IS dCol
+									transparency .5		#vnejsi cast - viditelnost
+								}
+							}
+					}
+					DEF tl TouchSensor{	#atom bude reagovat na stisk tl.
+					}
+				]
+			}
+		]
+	}
+	ROUTE tl.isActive TO java.popisky
+	ROUTE java.outputVis TO vzhled.transparency
+	ROUTE java.outputVis TO vzhledLoc.transparency
+	ROUTE java.outputPos TO pozice.translation
+}
+
+################################ vazby - vzory ################################
+###############################################################################
+PROTO Spoj[
+		field SFColor dCol 1.0 1.0 1.0
+		field SFFloat fLen 2.
+		field SFVec3f fPos 0 1 0.	#0 fLen/2 0
+		field SFFloat fRad .5
+	  ]{
+	Transform{
+		translation IS fPos
+		children[
+			Shape{
+				geometry Cylinder {
+					height IS fLen
+					radius IS fRad
+				}
+				appearance
+				Appearance{
+					material Material {
+						diffuseColor IS dCol
+						transparency 0
+					}
+				}
+			}
+		]
+	}
+}
+
+PROTO Vazba_err [
+		field SFFloat fDist 2.
+		field SFVec3f fPoz  0 1 0.
+	  ]{
+	Spoj {
+		dCol 1.0 0.0 0.0
+		fLen IS fDist
+		fPos IS fPoz
+		fRad .25
+	}
+}
+
+PROTO Vazba1 [
+		field SFFloat fDist 2.
+		field SFVec3f fPoz  0 1 0.
+	  ]{
+	Spoj {
+		dCol 1.0 1.0 1.0
+		fLen IS fDist
+		fPos IS fPoz
+	}
+}
+
+PROTO Vazba2 [
+		field SFFloat fDist 2.
+		field SFVec3f fPoz  0 1 0.
+	  ]{
+	Transform{
+		children[
+			Transform{
+				translation .16666666 0 0
+				children Spoj {
+					dCol 0 1 1
+					fRad .33333333
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+			Transform{
+				translation -.16666666 0 0
+				children Spoj {
+					dCol 0 1 1
+					fRad .33333333
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+		]
+	}
+}
+
+PROTO Vazba3 [
+		field SFFloat fDist 2.
+		field SFVec3f fPoz  0 1 0.
+	  ]{
+	Transform{
+		children [
+			Transform{
+				translation .22474487139159 0 0
+				children Spoj {
+					dCol 1 0 1
+					fRad .27525512860841
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+			Transform{
+				translation -.1123724356958 0 -.19463476799539
+				children Spoj {
+					dCol 1 0 1
+					fRad .27525512860841
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+			Transform{
+				translation -.1123724356958 0  .19463476799539
+				children Spoj {
+					dCol 1 0 1
+					fRad .27525512860841
+					fLen IS fDist
+					fPos IS fPoz
+				}
+			}
+		]
+	}
+}
+###############################################################################
+
+PROTO Prvek_C [
+		field MFString	lokanty []
+]{
+	Atom{
+		dCol 1.00000000 0. 0.
+		fRad 1.00000000
+		sSig ["C"]
+		sLoc IS lokanty
+	}
+}
+
+PROTO Prvek_H [
+		field MFString	lokanty []
+]{
+	Atom{
+		dCol 0. 0. 1.00000000
+		fRad 1.00000000
+		sSig ["H"]
+		sLoc IS lokanty
+	}
+}
+
+###############################################################################
+Transform{
+	children [
+		Transform{
+			translation -7.11404294 21.87885873 6.79173958
+			children [
+				Prvek_C {
+					lokanty [
+						"1"
+					]
+				}
+			]
+		}
+		Transform{
+			translation -5.39161217 15.00807883 7.40995503
+			children [
+				Prvek_C {
+					lokanty [
+						"2"
+					]
+				}
+			]
+		}
+		Transform{
+			translation -2.83215813 8.32919263 4.56724436
+			children [
+				Prvek_C {
+					lokanty [
+						"3"
+					]
+				}
+			]
+		}
+		Transform{
+			translation -.62694851 .69981983 4.55558092
+			children [
+				Prvek_C {
+					lokanty [
+						"4"
+					]
+				}
+			]
+		}
+		Transform{
+			translation 2.21334936 -6.15953008 1.73739894
+			children [
+				Prvek_C {
+					lokanty [
+						"5"
+					]
+				}
+			]
+		}
+		Transform{
+			translation 4.64583952 -13.45877695 1.90339800
+			children [
+				Prvek_C {
+					lokanty [
+						"6"
+					]
+				}
+			]
+		}
+		Transform{
+			translation 7.50124553 -19.24271098 -1.08001859
+			children [
+				Prvek_C {
+					lokanty [
+						"7"
+					]
+				}
+			]
+		}
+		Transform{
+			translation -9.09815687 24.77434669 2.49738919
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation -10.88209325 24.97755137 9.52276430
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation -4.06508026 26.47767507 7.54488334
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation -2.64520443 16.21873511 11.99205800
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation -10.12887076 14.14153856 10.01756429
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation 1.41845173 10.70234478 2.15265564
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation -6.32156727 8.47095784 .39744212
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation 2.43224554 .88727745 9.03638024
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation -5.14953177 -1.31009491 6.80657329
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation -1.06119587 -7.05813755 -2.51589244
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation 6.59137533 -4.49452619 -1.01732254
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation .67765422 -16.62273214 3.96391437
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation 8.02378319 -14.14444435 6.15556127
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation 7.55783539 -24.57978625 .59270863
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation 12.78561755 -20.46273902 -2.31836029
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation 6.52682936 -21.66823629 -5.97802615
+			children [
+				Prvek_H {
+					lokanty [
+					]
+				}
+			]
+		}
+		Transform{
+			translation -7.11404294 21.87885873 6.79173958
+			children [
+				Transform{
+					rotation .61821545 0. -1.72243077 2.88128815
+					children Vazba1 {
+						fDist 7.11031465
+						fPoz  0 3.55515732 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -7.11404294 21.87885873 6.79173958
+			children [
+				Transform{
+					rotation -4.29435039 0. 1.98411393 1.02154030
+					children Vazba1 {
+						fDist 5.54635050
+						fPoz  0 2.77317525 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -7.11404294 21.87885873 6.79173958
+			children [
+				Transform{
+					rotation 2.73102472 0. 3.76805030 .98335298
+					children Vazba1 {
+						fDist 5.59093867
+						fPoz  0 2.79546933 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -7.11404294 21.87885873 6.79173958
+			children [
+				Transform{
+					rotation .75314376 0. -3.04896267 .59916788
+					children Vazba1 {
+						fDist 5.56888773
+						fPoz  0 2.78444386 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -5.39161217 15.00807883 7.40995503
+			children [
+				Transform{
+					rotation -2.84271067 0. -2.55945403 2.62147094
+					children Vazba1 {
+						fDist 7.69670902
+						fPoz  0 3.84835451 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -5.39161217 15.00807883 7.40995503
+			children [
+				Transform{
+					rotation 4.58210296 0. -2.74640773 1.34793669
+					children Vazba1 {
+						fDist 5.47760089
+						fPoz  0 2.73880044 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -5.39161217 15.00807883 7.40995503
+			children [
+				Transform{
+					rotation 2.60760926 0. 4.73725859 1.72969274
+					children Vazba1 {
+						fDist 5.47650774
+						fPoz  0 2.73825387 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -2.83215813 8.32919263 4.56724436
+			children [
+				Transform{
+					rotation -.01166343 0. -2.20520961 2.86021535
+					children Vazba1 {
+						fDist 7.94168840
+						fPoz  0 3.97084420 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -2.83215813 8.32919263 4.56724436
+			children [
+				Transform{
+					rotation -2.41458871 0. -4.25060986 1.11885541
+					children Vazba1 {
+						fDist 5.43413048
+						fPoz  0 2.71706524 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -2.83215813 8.32919263 4.56724436
+			children [
+				Transform{
+					rotation -4.16980223 0. 3.48940913 1.54472906
+					children Vazba1 {
+						fDist 5.43905545
+						fPoz  0 2.71952772 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -.62694851 .69981983 4.55558092
+			children [
+				Transform{
+					rotation -2.81818198 0. -2.84029788 2.61352988
+					children Vazba1 {
+						fDist 7.94104043
+						fPoz  0 3.97052021 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -.62694851 .69981983 4.55558092
+			children [
+				Transform{
+					rotation 4.48079931 0. -3.05919406 1.53625895
+					children Vazba1 {
+						fDist 5.42875411
+						fPoz  0 2.71437705 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation -.62694851 .69981983 4.55558092
+			children [
+				Transform{
+					rotation 2.25099236 0. 4.52258326 1.94945718
+					children Vazba1 {
+						fDist 5.43695533
+						fPoz  0 2.71847766 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 2.21334936 -6.15953008 1.73739894
+			children [
+				Transform{
+					rotation .16599906 0. -2.43249016 2.81921766
+					children Vazba1 {
+						fDist 7.69568508
+						fPoz  0 3.84784254 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 2.21334936 -6.15953008 1.73739894
+			children [
+				Transform{
+					rotation -4.25329139 0. 3.27454524 1.73666567
+					children Vazba1 {
+						fDist 5.44248377
+						fPoz  0 2.72124188 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 2.21334936 -6.15953008 1.73739894
+			children [
+				Transform{
+					rotation -2.75472149 0. -4.37802596 1.25937961
+					children Vazba1 {
+						fDist 5.43395250
+						fPoz  0 2.71697625 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 4.64583952 -13.45877695 1.90339800
+			children [
+				Transform{
+					rotation -2.98341660 0. -2.85540600 2.52153990
+					children Vazba1 {
+						fDist 7.10689882
+						fPoz  0 3.55344941 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 4.64583952 -13.45877695 1.90339800
+			children [
+				Transform{
+					rotation 2.06051636 0. 3.96818529 2.18661776
+					children Vazba1 {
+						fDist 5.47748434
+						fPoz  0 2.73874217 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 4.64583952 -13.45877695 1.90339800
+			children [
+				Transform{
+					rotation 4.25216326 0. -3.37794366 1.69639175
+					children Vazba1 {
+						fDist 5.47371315
+						fPoz  0 2.73685657 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 7.50124553 -19.24271098 -1.08001859
+			children [
+				Transform{
+					rotation 1.67272723 0. -.05658986 2.83770982
+					children Vazba1 {
+						fDist 5.59335242
+						fPoz  0 2.79667621 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 7.50124553 -19.24271098 -1.08001859
+			children [
+				Transform{
+					rotation -1.23834169 0. -5.28437202 1.79190625
+					children Vazba1 {
+						fDist 5.56296200
+						fPoz  0 2.78148100 0
+					}
+				}
+			]
+		}
+		Transform{
+			translation 7.50124553 -19.24271098 -1.08001859
+			children [
+				Transform{
+					rotation -4.89800755 0. .97441616 2.02292938
+					children Vazba1 {
+						fDist 5.55185896
+						fPoz  0 2.77592948 0
+					}
+				}
+			]
+		}
+	]
+}
+
